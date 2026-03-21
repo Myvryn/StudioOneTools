@@ -1,0 +1,68 @@
+<Window x:Class="StudioOneTools.App.SongSelectionDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Multiple Song Versions Found"
+        Height="320"
+        Width="600"
+        MinHeight="280"
+        MinWidth="480"
+        ResizeMode="CanResizeWithGrip"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0"
+                   Margin="0,0,0,12"
+                   TextWrapping="Wrap"
+                   Text="This folder contains multiple .song files. Select the version to analyze, or archive all versions at once. The most recently modified file is pre-selected." />
+
+        <DataGrid x:Name="SongFilesDataGrid"
+                  Grid.Row="1"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  HeadersVisibility="Column"
+                  BorderBrush="#FFCCCCCC"
+                  BorderThickness="1">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding FileName}"
+                                    Header="Song"
+                                    Width="*" />
+                <DataGridTextColumn Binding="{Binding LastModified, StringFormat='{}{0:MMM d, yyyy  h:mm tt}'}"
+                                    Header="Last Modified"
+                                    Width="200" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,12,0,0">
+            <Button Padding="16,6"
+                    Margin="0,0,8,0"
+                    IsCancel="True"
+                    Content="Cancel"
+                    Click="CancelButton_OnClick" />
+            <Button Padding="16,6"
+                    Margin="0,0,8,0"
+                    Content="Archive All"
+                    Click="ArchiveAllButton_OnClick" />
+            <Button Padding="16,6"
+                    IsDefault="True"
+                    Content="Analyze Selected"
+                    Click="AnalyzeSelectedButton_OnClick" />
+        </StackPanel>
+    </Grid>
+</Window>

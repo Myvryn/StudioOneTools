@@ -1,0 +1,179 @@
+<Window x:Class="StudioOneTools.App.SweeperWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Studio One Folder Sweeper"
+        Height="600"
+        Width="960"
+        MinHeight="480"
+        MinWidth="720"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Grid.Row="0"
+                   Margin="0,0,0,12"
+                   FontSize="24"
+                   FontWeight="SemiBold"
+                   Text="Studio One Folder Sweeper" />
+
+        <!-- Root folder row -->
+        <Grid Grid.Row="1"
+              Margin="0,0,0,12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Text="Root folder" />
+
+            <TextBox x:Name="RootFolderPathTextBox"
+                     Grid.Column="1"
+                     Padding="8,6"
+                      Text="{Binding RootFolderPath, UpdateSourceTrigger=PropertyChanged}"
+                      TextChanged="RootFolderPathTextBox_OnTextChanged" />
+
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Content="Browse..."
+                    Click="BrowseButton_OnClick" />
+        </Grid>
+
+        <!-- Results DataGrid -->
+        <DataGrid x:Name="ResultsDataGrid"
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserResizeRows="False"
+                  SelectionMode="Single"
+                  HeadersVisibility="Column"
+                  PreviewMouseRightButtonDown="ResultsDataGrid_OnPreviewMouseRightButtonDown"
+                  ItemsSource="{Binding FlaggedFolders}">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Open in Explorer"
+                              Click="OpenInExplorerMenuItem_OnClick" />
+                    <MenuItem Header="Send To Archiver..."
+                              Click="SendToArchiverMenuItem_OnClick" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+            <DataGrid.Columns>
+
+                <!-- Single-click checkbox via template column -->
+                <DataGridTemplateColumn Width="44"
+                                        CanUserResize="False"
+                                        CanUserSort="False">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="&#x2714;"
+                                       HorizontalAlignment="Center"
+                                       ToolTip="Include in deletion" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Folder"
+                                    Binding="{Binding FolderName}"
+                                    Width="200"
+                                    IsReadOnly="True" />
+
+                <DataGridTextColumn Header="Reason"
+                                    Binding="{Binding Reason}"
+                                    Width="2*"
+                                    IsReadOnly="True" />
+
+                <DataGridTextColumn Header="Path"
+                                    Binding="{Binding FolderPath}"
+                                    Width="*"
+                                    IsReadOnly="True" />
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Action buttons row -->
+        <Grid Grid.Row="3"
+              Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0"
+                    Padding="16,6"
+                    IsEnabled="{Binding HasFlaggedFolders}"
+                    Content="Select All"
+                    Click="SelectAllButton_OnClick" />
+
+            <Button Grid.Column="1"
+                    Margin="8,0,0,0"
+                    Padding="16,6"
+                    IsEnabled="{Binding HasFlaggedFolders}"
+                    Content="Deselect All"
+                    Click="DeselectAllButton_OnClick" />
+
+            <Button Grid.Column="3"
+                    Padding="16,6"
+                    IsEnabled="{Binding CanDelete}"
+                    Content="{Binding DeleteButtonText}"
+                    Click="DeleteButton_OnClick" />
+        </Grid>
+
+        <!-- Status bar -->
+        <Border Grid.Row="4"
+                Margin="0,8,0,0"
+                Padding="10"
+                Background="#FFF4F4F4"
+                BorderBrush="#FFD0D0D0"
+                BorderThickness="1"
+                CornerRadius="6">
+            <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
+        </Border>
+
+        <!-- Busy overlay -->
+        <Grid Grid.Row="0"
+              Grid.RowSpan="5"
+              Background="#CC202020"
+              Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <ProgressBar IsIndeterminate="True"
+                             Width="300"
+                             Height="6" />
+                <TextBlock Margin="0,16,0,0"
+                           Foreground="White"
+                           FontSize="15"
+                           HorizontalAlignment="Center"
+                           Text="{Binding BusyMessage}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

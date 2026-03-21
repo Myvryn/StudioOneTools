@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/StudioOneTools.App/StudioOneTools.App.csproj" />
+    <Project Path="src/StudioOneTools.Core/StudioOneTools.Core.csproj" />
+    <Project Path="src/StudioOneTools.StudioOne/StudioOneTools.StudioOne.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/StudioOneTools.Tests/StudioOneTools.Tests.csproj" />
+  </Folder>
+</Solution>
