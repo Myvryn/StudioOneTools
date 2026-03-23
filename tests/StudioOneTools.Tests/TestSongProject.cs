@@ -61,7 +61,7 @@ internal sealed class TestSongProject : IDisposable
         using var archive = ZipFile.Open(songFilePath, ZipArchiveMode.Create);
 
         WriteArchiveEntry(archive, "Song/song.xml", CreateSongXml(usedAudioClipIds));
-        WriteArchiveEntry(archive, "Song/mediapool.xml", CreateMediaPoolXml(mediaPoolEntries));
+        WriteArchiveEntry(archive, "Song/mediapool.xml", CreateMediaPoolXml(mediaPoolEntries, ProjectFolderPath));
     }
 
     public string GetArchiveFilePath(string fileName)
@@ -112,7 +112,7 @@ internal sealed class TestSongProject : IDisposable
         return builder.ToString();
     }
 
-    private static string CreateMediaPoolXml(IReadOnlyCollection<MediaPoolEntry> mediaPoolEntries)
+    private static string CreateMediaPoolXml(IReadOnlyCollection<MediaPoolEntry> mediaPoolEntries, string projectFolderPath)
     {
         var builder = new StringBuilder();
 
@@ -123,7 +123,8 @@ internal sealed class TestSongProject : IDisposable
 
         foreach (var mediaPoolEntry in mediaPoolEntries)
         {
-            var mediaFileUrl = $"file:///F:/Example/Project/{mediaPoolEntry.RelativePath.Replace('\\', '/')}";
+            var absolutePath = Path.Combine(projectFolderPath, mediaPoolEntry.RelativePath);
+            var mediaFileUrl = new Uri(absolutePath).AbsoluteUri;
 
             builder.AppendLine($"""      <AudioClip mediaID="{mediaPoolEntry.MediaId}" useCount="{mediaPoolEntry.UseCount}">""");
             builder.AppendLine($"""        <Url x:id="path" type="1" url="{mediaFileUrl}" />""");

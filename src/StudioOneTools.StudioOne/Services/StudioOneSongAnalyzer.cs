@@ -53,7 +53,7 @@ public sealed class StudioOneSongAnalyzer : IStudioOneSongAnalyzer
         var songDocument      = LoadRequiredXml(songArchive, "Song/song.xml");
         var mediaPoolDocument = LoadRequiredXml(songArchive, "Song/mediapool.xml");
         var usedClipIds       = GetUsedAudioClipIds(songDocument);
-        var mediaPoolClips    = GetMediaPoolAudioClips(mediaPoolDocument);
+        var mediaPoolClips    = GetMediaPoolAudioClips(mediaPoolDocument, mediaFolderPath);
         var actualMediaFiles  = GetActualMediaFiles(mediaFolderPath);
 
         // Try to get plugins from song.xml, mediapool.xml, and AudioMixer.xml
@@ -486,7 +486,7 @@ public sealed class StudioOneSongAnalyzer : IStudioOneSongAnalyzer
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
     }
 
-    private static Dictionary<string, MediaPoolAudioClip> GetMediaPoolAudioClips(XDocument mediaPoolDocument)
+    private static Dictionary<string, MediaPoolAudioClip> GetMediaPoolAudioClips(XDocument mediaPoolDocument, string mediaFolderPath)
     {
         var clips = new Dictionary<string, MediaPoolAudioClip>(StringComparer.OrdinalIgnoreCase);
 
@@ -506,7 +506,7 @@ public sealed class StudioOneSongAnalyzer : IStudioOneSongAnalyzer
                 continue;
             }
 
-            if (!TryGetRelativeMediaPath(pathUrl, out var relativePath))
+            if (!TryGetRelativeMediaPath(pathUrl, mediaFolderPath, out var relativePath))
             {
                 continue;
             }
@@ -539,7 +539,7 @@ public sealed class StudioOneSongAnalyzer : IStudioOneSongAnalyzer
         return null;
     }
 
-    private static bool TryGetRelativeMediaPath(string pathUrl, out string relativePath)
+    private static bool TryGetRelativeMediaPath(string pathUrl, string mediaFolderPath, out string relativePath)
     {
         relativePath = string.Empty;
 
@@ -548,19 +548,18 @@ public sealed class StudioOneSongAnalyzer : IStudioOneSongAnalyzer
             return false;
         }
 
-        var segments = uri.LocalPath
-            .Split(['\\', '/'], StringSplitOptions.RemoveEmptyEntries);
+        var localPath           = uri.LocalPath;
+        var fullMediaPath       = Path.GetFullPath(mediaFolderPath);
+        var normalizedMediaPath = fullMediaPath.EndsWith(Path.DirectorySeparatorChar)
+            ? fullMediaPath
+            : fullMediaPath + Path.DirectorySeparatorChar;
 
-        var mediaIndex = Array.FindIndex(
-            segments,
-            segment => string.Equals(segment, "Media", StringComparison.OrdinalIgnoreCase));
-
-        if (mediaIndex < 0 || mediaIndex == segments.Length - 1)
+        if (!localPath.StartsWith(normalizedMediaPath, StringComparison.OrdinalIgnoreCase))
         {
             return false;
         }
 
-        relativePath = Path.Combine(segments[(mediaIndex + 1)..]);
+        relativePath = NormalizeRelativePath(Path.GetRelativePath(fullMediaPath, localPath));
 
         return !string.IsNullOrWhiteSpace(relativePath);
     }
