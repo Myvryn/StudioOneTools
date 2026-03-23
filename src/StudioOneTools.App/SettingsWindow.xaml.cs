@@ -23,6 +23,7 @@ public partial class SettingsWindow : Window
         {
             DefaultSongFolder    = settings.DefaultSongFolder,
             DefaultArchiveFolder = settings.DefaultArchiveFolder,
+            DebugMode            = settings.DebugMode,
         };
 
         DataContext = _settings;

@@ -245,7 +245,7 @@ public partial class MainWindow : Window
         {
             EnsureAnalysisIsCurrent();
 
-            var includeUnused = AskAboutUnusedMediaFiles();
+            var includeUnused = _viewModel.UnusedWaveFileCount > 0 && AskAboutUnusedMediaFiles();
             var settings = UserSettingsService.Load();
 
             var request = new SongArchiveRequest
