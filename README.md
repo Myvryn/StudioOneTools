@@ -171,7 +171,7 @@ This tool is designed for music producers and engineers using PreSonus Studio On
 
 **This tool is provided as-is for Studio One users. Please ensure you have backups before using the Folder Sweeper deletion feature.**
 
-© 2026 Your Name. All rights reserved.
+© 2026 Edwin Steven Jones. All rights reserved.
 Unauthorized copying of this file, via any medium, is strictly prohibited.
 ---
 
