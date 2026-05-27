@@ -1,4 +1,5 @@
 using System.Windows;
+using StudioOneTools.App.Help;
 using StudioOneTools.App.Settings;
 
 namespace StudioOneTools.App;
@@ -9,6 +10,8 @@ public partial class HomeWindow : Window
 
     private MainWindow?    _archiverWindow;
     private SweeperWindow? _sweeperWindow;
+    private BackupWindow?  _backupWindow;
+    private RenamerWindow? _renamerWindow;
 
     #endregion
 
@@ -49,6 +52,39 @@ public partial class HomeWindow : Window
         {
             _sweeperWindow.Activate();
         }
+    }
+
+    private void BackupCard_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_backupWindow is null)
+        {
+            _backupWindow        = new BackupWindow();
+            _backupWindow.Closed += (_, _) => _backupWindow = null;
+            _backupWindow.Show();
+        }
+        else
+        {
+            _backupWindow.Activate();
+        }
+    }
+
+    private void RenamerCard_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_renamerWindow is null)
+        {
+            _renamerWindow        = new RenamerWindow();
+            _renamerWindow.Closed += (_, _) => _renamerWindow = null;
+            _renamerWindow.Show();
+        }
+        else
+        {
+            _renamerWindow.Activate();
+        }
+    }
+
+    private void HelpButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        HelpService.Open();
     }
 
     #endregion

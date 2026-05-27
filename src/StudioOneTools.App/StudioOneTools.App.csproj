@@ -5,6 +5,10 @@
     <ProjectReference Include="..\StudioOneTools.Core\StudioOneTools.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Help\StudioProToolsHelp.html" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>

@@ -1,13 +1,15 @@
-# Studio One Tools
+# Studio Pro Tools
 
 A comprehensive utility suite for managing and archiving **PreSonus Studio One** music production projects.
 
 ## Overview
 
-**Studio One Tools** provides two integrated applications to streamline your Studio One workflow:
+**Studio Pro Tools** provides four integrated applications to streamline your Studio One workflow:
 
 1. **Song Archiver** – Analyze, inspect, and create optimized ZIP archives of your Studio One songs with detailed HTML documentation
 2. **Folder Sweeper** – Identify and safely delete orphaned Studio One cache and temporary folders
+3. **Song Backup** – Synchronize song folders to a backup location, copying only new or changed files
+4. **Song ReNamer** – Rename the entire song package — folder, `.song` files, and Mixdown/Master audio — in one step
 
 ## Features
 
@@ -37,6 +39,44 @@ A comprehensive utility suite for managing and archiving **PreSonus Studio One**
   - Identifies plugin vendor and name information
   - Channel-to-plugin mapping from audio mixer configuration
 
+### Song Backup
+
+- **Smart Synchronization**
+  - Scans a root folder and lists all song subfolders containing `.song` files
+  - Copies only files that are new or have been modified since the last backup
+  - Skips files already up to date — fast incremental runs after the first backup
+
+- **Selective Backup**
+  - Checkbox list to include or exclude individual song folders
+  - **Select All** / **Deselect All** for bulk selection
+  - Both the songs folder and backup destination are remembered between sessions
+
+- **Backup Confirmation Dialog**
+  - Preview which songs will be backed up and how many files each requires
+  - Toggle **"Include unused audio takes from tracks"** — file counts update live
+  - Cancel to return without backing up, or confirm to start
+
+- **Audio Take Control**
+  - By default all files are included (safest option)
+  - Uncheck to skip WAV files that are recorded but not used in the song — saves space in the backup
+
+### Song ReNamer
+
+- **Full Package Rename**
+  - Renames the song folder, all `.song` files that match the old name, and any Mixdown/Master audio files that start with the old name
+  - Updates internal file references inside `.song` archives automatically — no manual editing required
+
+- **Default Name Detection**
+  - Detects Studio One's default `Username_YYYY-MM-DD` naming pattern and flags it with a "Default name" badge
+  - Prompts you to choose a real name when a default is detected
+
+- **Smart Name Suggestions**
+  - Scans the song folder for `.song` files with non-default names and surfaces them as clickable suggestion chips
+  - One click fills in the new name field — useful when the song was saved under a descriptive name at some point
+
+- **Preview Playback**
+  - If a Mixdown or Master audio file exists, a **Play** button lets you listen before renaming — handy for confirming you have the right song open
+
 ### Folder Sweeper
 
 - **Automated Scanning**
@@ -64,6 +104,8 @@ A comprehensive utility suite for managing and archiving **PreSonus Studio One**
 3. Choose your tool from the home screen:
    - **Song Archiver** for archiving and analyzing songs
    - **Folder Sweeper** for cleaning up orphaned folders
+   - **Song Backup** for syncing songs to a backup location
+   - **Song ReNamer** for renaming a complete song package
 
 ### Song Archiver Workflow
 
@@ -89,6 +131,59 @@ A comprehensive utility suite for managing and archiving **PreSonus Studio One**
 
 5. **Review Report**
    - Open the generated `Song_Information.html` from the ZIP to view complete metadata
+
+### Song Backup Workflow
+
+1. **Select Songs Folder**
+   - Click **Browse** next to "Songs folder" or paste a path
+   - All subfolders containing `.song` files are listed automatically
+
+2. **Select Songs to Back Up**
+   - Check individual songs or use **Select All**
+   - All songs are selected by default when the folder loads
+
+3. **Choose Backup Destination**
+   - Click **Browse** next to "Backup to" and choose (or create) a destination folder
+   - The destination is remembered for next time
+
+4. **Click Backup**
+   - A summary dialog shows each song and the number of files to copy
+   - Toggle **"Include unused audio takes from tracks"** — counts update in real time
+     - **Checked (default):** all files are copied, including recorded takes not used in the mix
+     - **Unchecked:** unused WAV files are skipped, reducing backup size
+   - Click **Cancel** to go back, or **Backup** to start
+
+5. **Done**
+   - Only new and modified files are copied — unchanged files are skipped
+   - A completion message shows the total files copied and any errors
+
+### Song ReNamer Workflow
+
+1. **Open a song folder**
+   - Click **Browse** and select the Studio One song folder you want to rename
+   - The tool analyses the folder instantly: it reads the current name, checks for a default name pattern, and scans for name suggestions
+
+2. **Review the analysis**
+   - **Current name** is displayed at the top of the panel
+   - If the name matches Studio One's default `Username_YYYY-MM-DD` pattern, a **"Default name"** badge appears
+   - Any `.song` files in the folder with non-default names appear as clickable **suggestion chips**
+
+3. **Optionally preview the audio**
+   - If a Mixdown or Master audio file exists, click **Play Mixdown** (or **Play Master**) to confirm this is the right song before renaming
+
+4. **Choose the new name**
+   - Click a suggestion chip to fill in the name field automatically, or type directly in the **New name** field
+
+5. **Click Rename**
+   - Confirm in the dialog — the tool then:
+     - Updates internal file path references inside each `.song` archive
+     - Renames `.song` files that match the old folder name
+     - Renames Mixdown/Master audio files that start with the old name
+     - Renames the folder itself
+
+6. **Done**
+   - A confirmation shows how many files were renamed
+   - The panel re-analyses the renamed folder so it is ready for another rename if needed
 
 ### Folder Sweeper Workflow
 
@@ -144,6 +239,8 @@ Access **Settings** (⚙ icon in Song Archiver) to configure:
 - Media file playback is audio-only (no video support)
 - Sweeper scans only identify common cache/temp patterns
 - Archive XML embedding is optional to keep file size down
+- Song Backup does not delete files removed from the source — it is additive only
+- Song ReNamer only renames Mixdown/Master audio files at the top level of those subfolders; deeply nested files with the old name in other locations are not affected
 
 ## Troubleshooting
 
@@ -173,6 +270,6 @@ This tool is provided as-is for Studio One users. Please ensure you have backups
 
 ---
 
-**Version:** 1.0  
+**Version:** 1.2  
 **Built on:** .NET 10 | WPF | C# 14  
-**Last Updated:** 2025
+**Last Updated:** 2026
