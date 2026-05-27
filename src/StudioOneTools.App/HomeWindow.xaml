@@ -4,10 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Studio One Tools"
-        Height="440"
-        Width="860"
-        ResizeMode="CanMinimize"
+        Title="Studio Pro Tools"
+        Height="450"
+        Width="960"
+        MinHeight="420"
+        MinWidth="900"
+        ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -55,17 +57,34 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <StackPanel Grid.Column="0" Margin="32,28,32,16">
                 <TextBlock FontSize="24"
                            FontWeight="SemiBold"
-                           Text="Studio One Tools" />
+                           Text="Studio Pro Tools" />
                 <TextBlock Margin="0,6,0,0"
                            FontSize="13"
                            Foreground="#FF666666"
                            Text="Select a tool to get started." />
             </StackPanel>
+
+            <Button Grid.Column="1"
+                    Margin="0,0,28,0"
+                    Padding="12,6"
+                    VerticalAlignment="Center"
+                    Click="HelpButton_OnClick">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontFamily="Segoe MDL2 Assets"
+                               FontSize="14"
+                               VerticalAlignment="Center"
+                               Margin="0,0,6,0"
+                               Text="&#xE897;" />
+                    <TextBlock VerticalAlignment="Center"
+                               Text="Help" />
+                </StackPanel>
+            </Button>
         </Grid>
 
         <ScrollViewer Grid.Row="1"
@@ -119,6 +138,54 @@
                                    TextAlignment="Center"
                                    TextWrapping="Wrap"
                                    Text="Find and remove old or incomplete song folders." />
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource ToolCardStyle}"
+                        Click="BackupCard_OnClick">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                   FontSize="44"
+                                   Foreground="#FF107C41"
+                                   HorizontalAlignment="Center"
+                                   Text="&#xE74E;" />
+                        <TextBlock Margin="0,12,0,0"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"
+                                   Text="Song Backup" />
+                        <TextBlock Margin="10,5,10,0"
+                                   FontSize="11"
+                                   Foreground="#FF888888"
+                                   HorizontalAlignment="Center"
+                                   MaxWidth="160"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="Sync songs to a backup location, keeping only changed files." />
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource ToolCardStyle}"
+                        Click="RenamerCard_OnClick">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                   FontSize="44"
+                                   Foreground="#FF7B2FBE"
+                                   HorizontalAlignment="Center"
+                                   Text="&#xE8AC;" />
+                        <TextBlock Margin="0,12,0,0"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"
+                                   Text="Song ReNamer" />
+                        <TextBlock Margin="10,5,10,0"
+                                   FontSize="11"
+                                   Foreground="#FF888888"
+                                   HorizontalAlignment="Center"
+                                   MaxWidth="160"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="Rename the entire song package — folder, files, and references." />
                     </StackPanel>
                 </Button>
 

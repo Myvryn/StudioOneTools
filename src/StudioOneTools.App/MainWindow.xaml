@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:StudioOneTools.App.Converters"
         mc:Ignorable="d"
-        Title="Studio One Tools - Archiver"
+        Title="Studio Pro Tools - Archiver"
         Height="780"
         Width="1180"
         MinHeight="720"

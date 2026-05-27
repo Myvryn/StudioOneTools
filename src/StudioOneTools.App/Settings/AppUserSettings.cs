@@ -6,5 +6,9 @@ public sealed class AppUserSettings
 
     public string DefaultArchiveFolder { get; set; } = string.Empty;
 
+    public string DefaultBackupFolder  { get; set; } = string.Empty;
+
+    public string DefaultRenameFolder { get; set; } = string.Empty;
+
     public bool DebugMode { get; set; } = false;
 }
