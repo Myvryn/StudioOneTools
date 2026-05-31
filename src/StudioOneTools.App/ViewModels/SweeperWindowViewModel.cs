@@ -8,10 +8,11 @@ public sealed class SweeperWindowViewModel : BindableBase
 {
     #region Fields
 
-    private string _rootFolderPath = string.Empty;
-    private string _statusMessage  = "Choose a root folder to find candidates for deletion.";
+    private string _rootFolderPath           = string.Empty;
+    private string _statusMessage            = "Choose a root folder to find candidates for deletion.";
     private bool   _isScanning;
     private bool   _isDeleting;
+    private bool   _removeFromRecentDocuments = true;
 
     #endregion
 
@@ -93,6 +94,12 @@ public sealed class SweeperWindowViewModel : BindableBase
             var count = SelectedCount;
             return count == 1 ? "Delete 1 Selected Folder" : $"Delete {count} Selected Folders";
         }
+    }
+
+    public bool RemoveFromRecentDocuments
+    {
+        get => _removeFromRecentDocuments;
+        set => SetProperty(ref _removeFromRecentDocuments, value);
     }
 
     public bool CanScan   => !string.IsNullOrWhiteSpace(RootFolderPath) && !IsScanning && !IsDeleting;

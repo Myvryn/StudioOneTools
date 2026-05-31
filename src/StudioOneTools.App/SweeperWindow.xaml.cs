@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media;
 using System.Threading.Tasks;
+using StudioOneTools.App.Settings;
 using StudioOneTools.App.ViewModels;
 using StudioOneTools.Core.Contracts;
 using StudioOneTools.StudioOne.Services;
@@ -30,6 +31,22 @@ public partial class SweeperWindow : Window
         _viewModel  = new SweeperWindowViewModel();
         _sweeper    = new SongFolderSweeper();
         DataContext = _viewModel;
+
+        var settings = UserSettingsService.Load();
+        if (!string.IsNullOrWhiteSpace(settings.DefaultSongFolder) && Directory.Exists(settings.DefaultSongFolder))
+        {
+            _viewModel.RootFolderPath = settings.DefaultSongFolder;
+        }
+
+        Loaded += OnLoaded;
+    }
+
+    private async void OnLoaded(object sender, RoutedEventArgs e)
+    {
+        if (!string.IsNullOrWhiteSpace(_viewModel.RootFolderPath) && Directory.Exists(_viewModel.RootFolderPath))
+        {
+            await RunScanAsync(Path.GetFullPath(_viewModel.RootFolderPath), showErrorDialog: false);
+        }
     }
 
     #endregion
@@ -38,11 +55,16 @@ public partial class SweeperWindow : Window
 
     private void BrowseButton_OnClick(object sender, RoutedEventArgs e)
     {
+        var initialPath = !string.IsNullOrWhiteSpace(_viewModel.RootFolderPath) && Directory.Exists(_viewModel.RootFolderPath)
+            ? _viewModel.RootFolderPath
+            : UserSettingsService.Load().DefaultSongFolder;
+
         using var dialog = new WinForms.FolderBrowserDialog
         {
             Description            = "Choose the root folder containing Studio One song folders.",
             UseDescriptionForTitle = true,
             ShowNewFolderButton    = false,
+            InitialDirectory       = initialPath,
         };
 
         if (dialog.ShowDialog() != WinForms.DialogResult.OK)
@@ -181,6 +203,9 @@ public partial class SweeperWindow : Window
         {
             _viewModel.RemoveItem(item);
         }
+
+        if (_viewModel.RemoveFromRecentDocuments && deleted.Count > 0)
+            StudioOneRecentDocumentsService.RemoveSongsInFolders(deleted.Select(d => d.FolderPath));
 
         var summary    = $"Deleted {deleted.Count} of {toDelete.Count} {folderWord}.";
         _viewModel.StatusMessage = summary;

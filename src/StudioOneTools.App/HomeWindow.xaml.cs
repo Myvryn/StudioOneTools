@@ -8,10 +8,12 @@ public partial class HomeWindow : Window
 {
     #region Fields
 
-    private MainWindow?    _archiverWindow;
-    private SweeperWindow? _sweeperWindow;
-    private BackupWindow?  _backupWindow;
-    private RenamerWindow? _renamerWindow;
+    private MainWindow?         _archiverWindow;
+    private SweeperWindow?      _sweeperWindow;
+    private BackupWindow?       _backupWindow;
+    private RenamerWindow?      _renamerWindow;
+    private PathFixerWindow?    _pathFixerWindow;
+    private UnArchiverWindow?   _unArchiverWindow;
 
     #endregion
 
@@ -79,6 +81,34 @@ public partial class HomeWindow : Window
         else
         {
             _renamerWindow.Activate();
+        }
+    }
+
+    private void UnArchiverCard_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_unArchiverWindow is null)
+        {
+            _unArchiverWindow        = new UnArchiverWindow();
+            _unArchiverWindow.Closed += (_, _) => _unArchiverWindow = null;
+            _unArchiverWindow.Show();
+        }
+        else
+        {
+            _unArchiverWindow.Activate();
+        }
+    }
+
+    private void PathFixerCard_OnClick(object sender, RoutedEventArgs e)
+    {
+        if (_pathFixerWindow is null)
+        {
+            _pathFixerWindow        = new PathFixerWindow();
+            _pathFixerWindow.Closed += (_, _) => _pathFixerWindow = null;
+            _pathFixerWindow.Show();
+        }
+        else
+        {
+            _pathFixerWindow.Activate();
         }
     }
 

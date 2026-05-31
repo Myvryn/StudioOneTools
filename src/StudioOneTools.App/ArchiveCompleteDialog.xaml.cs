@@ -13,6 +13,8 @@ public partial class ArchiveCompleteDialog : Window
 
     public bool OpenArchiveFolder { get; private set; }
 
+    public bool RemoveFromRecentDocuments { get; private set; }
+
     #endregion
 
     #region Constructors
@@ -29,16 +31,18 @@ public partial class ArchiveCompleteDialog : Window
 
     private void YesButton_OnClick(object sender, RoutedEventArgs e)
     {
-        DeleteOriginalFolder = true;
-        OpenArchiveFolder = OpenFolderCheckBox.IsChecked ?? false;
+        DeleteOriginalFolder      = true;
+        OpenArchiveFolder         = OpenFolderCheckBox.IsChecked ?? false;
+        RemoveFromRecentDocuments = RemoveFromRecentDocsCheckBox.IsChecked ?? false;
         DialogResult = true;
         Close();
     }
 
     private void NoButton_OnClick(object sender, RoutedEventArgs e)
     {
-        DeleteOriginalFolder = false;
-        OpenArchiveFolder = OpenFolderCheckBox.IsChecked ?? false;
+        DeleteOriginalFolder      = false;
+        OpenArchiveFolder         = OpenFolderCheckBox.IsChecked ?? false;
+        RemoveFromRecentDocuments = RemoveFromRecentDocsCheckBox.IsChecked ?? false;
         DialogResult = true;
         Close();
     }

@@ -80,11 +80,13 @@
     }
 
     /* Tool accent stripes */
-    .accent-blue   { border-top: 4px solid #0078D4; }
-    .accent-orange { border-top: 4px solid #D45B07; }
-    .accent-green  { border-top: 4px solid #107C41; }
-    .accent-purple { border-top: 4px solid #7B2FBE; }
-    .accent-gray   { border-top: 4px solid #666; }
+    .accent-blue      { border-top: 4px solid #0078D4; }
+    .accent-lightblue { border-top: 4px solid #1068A8; }
+    .accent-orange    { border-top: 4px solid #D45B07; }
+    .accent-green     { border-top: 4px solid #107C41; }
+    .accent-purple    { border-top: 4px solid #7B2FBE; }
+    .accent-teal      { border-top: 4px solid #00776F; }
+    .accent-gray      { border-top: 4px solid #666; }
 
     .icon { font-size: 22px; }
 
@@ -111,9 +113,11 @@
       justify-content: center;
       margin-top: 1px;
     }
-    .accent-orange .steps > li::before { background: #D45B07; }
-    .accent-green  .steps > li::before { background: #107C41; }
-    .accent-purple .steps > li::before { background: #7B2FBE; }
+    .accent-lightblue .steps > li::before { background: #1068A8; }
+    .accent-orange    .steps > li::before { background: #D45B07; }
+    .accent-green     .steps > li::before { background: #107C41; }
+    .accent-purple    .steps > li::before { background: #7B2FBE; }
+    .accent-teal      .steps > li::before { background: #00776F; }
 
     .steps > li .step-body { flex: 1; }
     .steps > li strong { display: block; margin-bottom: 3px; font-size: 15px; }
@@ -178,10 +182,12 @@
       vertical-align: middle;
       margin-left: 6px;
     }
-    .badge-blue   { background: #e0f0ff; color: #0056a0; }
-    .badge-orange { background: #fff0e0; color: #a03c00; }
-    .badge-green  { background: #e0f5ea; color: #0a5c2c; }
-    .badge-purple { background: #f3eaff; color: #5A1E96; }
+    .badge-blue      { background: #e0f0ff; color: #0056a0; }
+    .badge-lightblue { background: #ddeeff; color: #1068A8; }
+    .badge-orange    { background: #fff0e0; color: #a03c00; }
+    .badge-green     { background: #e0f5ea; color: #0a5c2c; }
+    .badge-purple    { background: #f3eaff; color: #5A1E96; }
+    .badge-teal      { background: #e0f5f3; color: #005a55; }
 
     /* ── Footer ─────────────────────────────────── */
     footer {
@@ -197,7 +203,7 @@
   <!-- ════════════════════════════════ HEADER ════════════════════════════════ -->
   <div class="site-header">
     <h1>🎵 Studio Pro Tools</h1>
-    <p class="tagline">Help &amp; Documentation &nbsp;&middot;&nbsp; Version 1.2</p>
+    <p class="tagline">Help &amp; Documentation &nbsp;&middot;&nbsp; Version 1.3</p>
   </div>
 
   <!-- ════════════════════════════════ NAV ═══════════════════════════════════ -->
@@ -205,9 +211,11 @@
     <ul>
       <li><a href="#overview">Overview</a></li>
       <li><a href="#archiver">Song Archiver</a></li>
+      <li><a href="#unarchiver">Un-Archiver</a></li>
       <li><a href="#sweeper">Folder Sweeper</a></li>
       <li><a href="#backup">Song Backup</a></li>
       <li><a href="#renamer">Song ReNamer</a></li>
+      <li><a href="#pathfixer">Path Fixer</a></li>
       <li><a href="#settings">Settings</a></li>
       <li><a href="#troubleshooting">Troubleshooting</a></li>
     </ul>
@@ -221,15 +229,20 @@
       <h2><span class="icon">🎛️</span> Overview</h2>
       <p class="section-intro">
         Studio Pro Tools is a portable utility suite for <strong>PreSonus Studio One</strong> producers.
-        All four tools launch from the home screen and can run side by side.
+        All six tools launch from the home screen and can run side by side.
       </p>
 
-      <h3>The Four Tools</h3>
+      <h3>The Six Tools</h3>
       <ul style="padding-left:20px; font-size:14px; color:#444;">
         <li style="margin-bottom:10px;">
           <strong>Song Archiver</strong> <span class="badge badge-blue">Blue</span><br />
           Analyses a song folder, identifies used and unused audio files, and packages everything
           into a tidy ZIP archive with an HTML inventory report.
+        </li>
+        <li style="margin-bottom:10px;">
+          <strong>Un-Archiver</strong> <span class="badge badge-lightblue">Blue</span><br />
+          Restores a song from an archive ZIP — extracts the files, creates the song folder,
+          and automatically fixes all internal paths so Studio One can open it immediately.
         </li>
         <li style="margin-bottom:10px;">
           <strong>Folder Sweeper</strong> <span class="badge badge-orange">Orange</span><br />
@@ -241,11 +254,15 @@
           Synchronises selected song folders to a backup location, copying only new or changed files
           so each run is fast.
         </li>
-        <li>
+        <li style="margin-bottom:10px;">
           <strong>Song ReNamer</strong> <span class="badge badge-purple">Purple</span><br />
           Renames the entire song package in one step — folder, <code>.song</code> files,
-          Mixdown/Master audio, and internal file references. Suggests names found in the
-          song's own files and plays the latest Mixdown or Master so you can confirm before committing.
+          Mixdown/Master audio, and internal file references.
+        </li>
+        <li>
+          <strong>Path Fixer</strong> <span class="badge badge-teal">Teal</span><br />
+          Detects and corrects broken internal file paths inside a <code>.song</code> file
+          after it has been moved or restored to a different location.
         </li>
       </ul>
 
@@ -268,30 +285,24 @@
           <div class="step-body">
             <strong>Select the song folder</strong>
             <p>Click <strong>Browse</strong> or paste the full path into the "Song folder" field.
-            The folder should be the one that directly contains the <code>.song</code> file
-            (not a parent directory).</p>
-            <p style="margin-top:6px;">Analysis starts automatically after a short delay.
-            If the folder contains more than one song file, a dialog will ask which one to use.</p>
+            The folder should directly contain the <code>.song</code> file — not a parent directory.
+            Analysis starts automatically after a short delay. If the folder contains more than one
+            song file, a dialog will ask which one to use.</p>
           </div>
         </li>
         <li>
           <div class="step-body">
             <strong>Review the analysis results</strong>
-            <p>The panel shows:</p>
-            <ul>
-              <li>Song name and file paths</li>
-              <li>Count of used and unused WAV files</li>
-              <li>Any issues such as missing referenced audio</li>
-              <li>Preview file (Master or Mixdown) if one exists</li>
-            </ul>
-            <p style="margin-top:6px;">The media grid lists every file with columns for
-            play, filename, relative path, used status, disk presence, and use count.</p>
+            <p>The panel shows the song name, count of used and unused WAV files, any issues
+            (such as missing referenced audio), and a preview file if one exists.
+            The media grid lists every file with columns for play, filename, path, used status,
+            disk presence, and use count.</p>
           </div>
         </li>
         <li>
           <div class="step-body">
             <strong>Optionally play back audio files</strong>
-            <p>Click the <strong>▶</strong> button on any WAV row to hear that file.
+            <p>Click <strong>▶</strong> on any WAV row to hear that file.
             A progress bar fills as it plays. Starting a new file stops the previous one.</p>
           </div>
         </li>
@@ -308,10 +319,11 @@
         <li>
           <div class="step-body">
             <strong>Create the archive</strong>
-            <p>Click <strong>Create Archive</strong>. A dialog confirms the result and offers to:</p>
+            <p>Click <strong>Create Archive</strong>. When complete, a dialog offers:</p>
             <ul>
-              <li>Include unused media files (excluded by default)</li>
-              <li>Delete the original song folder after archiving</li>
+              <li>Include unused media files in the archive (excluded by default)</li>
+              <li><strong>Remove from Studio One Recent Documents</strong> (default: on) — removes the song from Studio One's recent file list</li>
+              <li>Delete the original song folder</li>
               <li>Open the archive folder in Explorer</li>
             </ul>
           </div>
@@ -335,6 +347,61 @@
       </div>
     </div>
 
+    <!-- ── Un-Archiver ──────────────────────────────────────────────────── -->
+    <div class="card accent-lightblue" id="unarchiver">
+      <h2><span class="icon">📦</span> Un-Archiver</h2>
+      <p class="section-intro">
+        Restores a song from a ZIP archive created by Song Archiver. Extracts the files to a new
+        folder and automatically fixes internal paths so Studio One can open the song immediately
+        without relinking any media.
+      </p>
+
+      <ol class="steps">
+        <li>
+          <div class="step-body">
+            <strong>Select the archive file</strong>
+            <p>Click <strong>Browse</strong> next to "Archive file" and choose a <code>.zip</code>
+            created by Song Archiver. The archive name becomes the name of the restored song folder.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <strong>Choose a destination folder</strong>
+            <p>Click <strong>Browse</strong> next to "Destination" and select (or create) the folder
+            where the song will be placed. Defaults to your configured <strong>Default Song Folder</strong>.
+            The "Will extract to" preview shows the exact path that will be created.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <strong>Click Extract &amp; Fix Paths</strong>
+            <p>The tool will:</p>
+            <ul>
+              <li>Create a new subfolder named after the archive</li>
+              <li>Extract all files from the ZIP into that subfolder</li>
+              <li>Run Path Fixer automatically on the extracted <code>.song</code> file</li>
+            </ul>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <strong>Done</strong>
+            <p>A summary reports how many internal paths were corrected. Click <strong>Yes</strong>
+            when prompted to open the extracted folder in Explorer.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="note">
+        The Un-Archiver will not overwrite an existing folder. If a folder with the same name
+        already exists at the destination, choose a different destination or rename the existing folder first.
+      </div>
+      <div class="tip">
+        After extraction, open the song in Studio One normally — all media files will be found
+        automatically because the paths have already been corrected.
+      </div>
+    </div>
+
     <!-- ── Folder Sweeper ────────────────────────────────────────────────── -->
     <div class="card accent-orange" id="sweeper">
       <h2><span class="icon">🧹</span> Folder Sweeper</h2>
@@ -347,8 +414,9 @@
         <li>
           <div class="step-body">
             <strong>Select a root folder</strong>
-            <p>Click <strong>Browse</strong> or type a path into the "Root folder" field.
-            Scanning begins automatically — no button click required.</p>
+            <p>The root folder is pre-populated from your <strong>Default Song Folder</strong>
+            setting and scanning begins automatically when the window opens — no button click
+            required. You can also click <strong>Browse</strong> to choose a different folder.</p>
           </div>
         </li>
         <li>
@@ -367,7 +435,10 @@
           <div class="step-body">
             <strong>Select folders to delete</strong>
             <p>Use the checkboxes to pick individual folders, or use
-            <strong>Select All</strong> / <strong>Deselect All</strong> for bulk selection.</p>
+            <strong>Select All</strong> / <strong>Deselect All</strong>.
+            The <strong>Remove from Recent Documents</strong> checkbox (on by default) will
+            automatically clean up Studio One's recent file list for any songs inside the
+            deleted folders.</p>
           </div>
         </li>
         <li>
@@ -443,13 +514,11 @@
             <ul>
               <li>
                 <strong>Include unused audio takes from tracks</strong> (default: on) —
-                all files are backed up, including WAV recordings that aren't used in the mix.
-                This is the safest option.
+                all files are backed up, including WAV recordings not used in the mix.
               </li>
               <li>
-                <strong>Unchecked</strong> — WAV files that are present on disk but not referenced
-                by the song are skipped. The file counts update live so you can see the difference
-                before committing.
+                <strong>Unchecked</strong> — WAV files not referenced by the song are skipped.
+                File counts update live so you can see the difference before committing.
               </li>
             </ul>
             <p style="margin-top:6px;">Click <strong>Cancel</strong> to return to the selection
@@ -501,9 +570,8 @@
               <li>The <strong>current folder name</strong></li>
               <li>A <strong>"Default name"</strong> badge if the folder still has Studio One's
                   auto-generated <code>Username_YYYY-MM-DD</code> name</li>
-              <li><strong>Suggestion chips</strong> for any <code>.song</code> files in the folder
-                  whose names differ from the folder — these are titles you may have saved under
-                  at some point</li>
+              <li><strong>Suggestion chips</strong> for any <code>.song</code> files whose names
+                  differ from the folder name</li>
               <li>A <strong>Play</strong> button if a Mixdown or Master audio file is found</li>
             </ul>
           </div>
@@ -512,23 +580,21 @@
           <div class="step-body">
             <strong>Optionally listen to the song</strong>
             <p>Click <strong>Play Mixdown</strong> or <strong>Play Master</strong> to hear the
-            latest export and confirm you have the right song open before renaming.
-            Click <strong>Stop</strong> to end playback.</p>
+            latest export and confirm you have the right song open. Click <strong>Stop</strong>
+            to end playback.</p>
           </div>
         </li>
         <li>
           <div class="step-body">
             <strong>Choose the new name</strong>
             <p>Click any suggestion chip to fill in the <strong>New name</strong> field
-            automatically, or type a name directly. The <strong>Rename</strong> button
-            enables as soon as the new name differs from the current one.</p>
+            automatically, or type a name directly.</p>
           </div>
         </li>
         <li>
           <div class="step-body">
             <strong>Click Rename and confirm</strong>
-            <p>A confirmation dialog summarises what will change. Click <strong>Yes</strong>
-            to proceed. The tool then:</p>
+            <p>A confirmation dialog summarises what will change. The tool then:</p>
             <ul>
               <li>Updates internal path references inside each <code>.song</code> archive</li>
               <li>Renames <code>.song</code> files whose stem matches the old folder name</li>
@@ -541,19 +607,79 @@
           <div class="step-body">
             <strong>Done</strong>
             <p>A summary confirms how many files were renamed. The panel re-analyses the
-            renamed folder automatically, so it is ready if you need to rename again.</p>
+            renamed folder automatically.</p>
           </div>
         </li>
       </ol>
 
       <div class="tip">
-        <span>Suggestion chips come from <code>.song</code> files inside the folder whose names
-        don't match the Studio One default pattern. If you saved a version under a real title
-        at any point, it will appear here as a one-click option.</span>
+        Suggestion chips come from <code>.song</code> files whose names don't match the Studio One
+        default pattern. If you saved a version under a real title at any point, it will appear
+        here as a one-click option.
       </div>
       <div class="warn">
-        Rename is permanent — there is no undo. Make sure you have a backup of the song
-        before renaming, especially when working on an important project.
+        Rename is permanent — there is no undo. Make sure you have a backup before renaming
+        an important project.
+      </div>
+    </div>
+
+    <!-- ── Path Fixer ───────────────────────────────────────────────────── -->
+    <div class="card accent-teal" id="pathfixer">
+      <h2><span class="icon">🔧</span> Path Fixer</h2>
+      <p class="section-intro">
+        Studio One stores absolute file paths inside every <code>.song</code> file. When a song
+        is moved or restored to a different location, those paths no longer match and Studio One
+        cannot find the media files. Path Fixer detects and corrects this in one click.
+      </p>
+
+      <ol class="steps">
+        <li>
+          <div class="step-body">
+            <strong>Select the .song file</strong>
+            <p>Click <strong>Browse</strong> and choose a <code>.song</code> file. Analysis
+            runs automatically — the tool reads the stored path from inside the file and
+            compares it to where the file actually is now.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <strong>Review the path comparison</strong>
+            <p>The panel shows:</p>
+            <ul>
+              <li><strong>Stored path</strong> — where Studio One thinks the song is</li>
+              <li><strong>Current path</strong> — where the file actually is</li>
+              <li><strong>Paths to fix</strong> — the number of internal references that need updating</li>
+            </ul>
+            <p style="margin-top:6px;">If the paths already match, the status bar will say
+            <em>"Paths are correct — no fix needed."</em></p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <strong>Click Fix Paths</strong>
+            <p>A confirmation prompt reminds you to back up the file first. Click <strong>Yes</strong>
+            to proceed. The tool rewrites all <code>file://</code> URLs across every XML file
+            inside the <code>.song</code> ZIP, replacing the old path prefix with the new one.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-body">
+            <strong>Done</strong>
+            <p>The tool re-analyses the file and confirms the paths are now correct. Open the
+            song in Studio One — all media files will be found automatically.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="note">
+        Path Fixer runs automatically as part of the <strong>Un-Archiver</strong> workflow —
+        you only need to use it manually when you've moved or copied a <code>.song</code> file
+        outside of the normal archive/restore process.
+      </div>
+      <div class="warn">
+        Back up your <code>.song</code> file before fixing. Although the tool uses a safe
+        temporary-file write strategy, it's good practice to keep a copy before any in-place
+        modification.
       </div>
     </div>
 
@@ -576,8 +702,8 @@
         <tbody>
           <tr>
             <td><strong>Default Song Folder</strong></td>
-            <td>Pre-populates the song folder field when a tool opens.</td>
-            <td>Song Archiver, Song Backup</td>
+            <td>Pre-populates song folder fields and triggers automatic scanning on open.</td>
+            <td>Song Archiver, Folder Sweeper, Un-Archiver (default destination)</td>
           </tr>
           <tr>
             <td><strong>Default Archive Folder</strong></td>
@@ -588,8 +714,7 @@
             <td><strong>Default Backup Folder</strong></td>
             <td>
               Pre-populates the backup destination in Song Backup.
-              This is also saved automatically when you browse to a folder
-              or complete a successful backup.
+              Also saved automatically after a successful backup.
             </td>
             <td>Song Backup</td>
           </tr>
@@ -597,7 +722,7 @@
             <td><strong>Default Rename Folder</strong></td>
             <td>
               Remembered automatically after each rename. The folder browser in Song ReNamer
-              opens here by default, and the last renamed folder is pre-loaded on next launch.
+              opens here by default.
             </td>
             <td>Song ReNamer</td>
           </tr>
@@ -621,7 +746,7 @@
 
     <!-- ── Troubleshooting ───────────────────────────────────────────────── -->
     <div class="card" id="troubleshooting">
-      <h2><span class="icon">🔧</span> Troubleshooting</h2>
+      <h2><span class="icon">❓</span> Troubleshooting</h2>
       <p class="section-intro">Solutions for the most common issues.</p>
 
       <div class="trouble-item">
@@ -638,6 +763,41 @@
           One or more WAV files referenced by the song do not exist on disk. Open Studio One,
           locate the missing files using Pool &rarr; Find Missing Files, then re-analyse.
           Archiving is disabled until all referenced files are present.
+        </div>
+      </div>
+
+      <div class="trouble-item">
+        <div class="problem">All WAV files show as "not used" in the Archiver</div>
+        <div class="solution">
+          This typically happens when the song has been moved from its original location and the
+          internal paths no longer match. Run <strong>Path Fixer</strong> on the <code>.song</code>
+          file, then re-open it in the Archiver.
+        </div>
+      </div>
+
+      <div class="trouble-item">
+        <div class="problem">"Could not find the stored song path (documentPath)"</div>
+        <div class="solution">
+          The <code>mediapool.xml</code> inside the <code>.song</code> file does not contain a
+          <code>documentPath</code> entry. This can happen with very old or manually edited song files.
+          Open and re-save the song in Studio One to regenerate the entry, then try Path Fixer again.
+        </div>
+      </div>
+
+      <div class="trouble-item">
+        <div class="problem">Path Fixer shows "Paths are correct" but Studio One still reports missing files</div>
+        <div class="solution">
+          The internal paths match the current location, but the media files themselves may have been
+          moved or deleted. Check that the <code>Media/</code> subfolder is present and contains the
+          expected WAV files.
+        </div>
+      </div>
+
+      <div class="trouble-item">
+        <div class="problem">"A folder named X already exists at the destination" (Un-Archiver)</div>
+        <div class="solution">
+          The Un-Archiver will not overwrite an existing folder. Rename or move the existing folder,
+          or choose a different destination.
         </div>
       </div>
 
@@ -662,9 +822,8 @@
       <div class="trouble-item">
         <div class="problem">Song Backup shows 0 files to copy</div>
         <div class="solution">
-          All files in the selected songs are already present in the backup destination
-          and up to date. Nothing needs to be copied. If you expected changes, confirm
-          that you are pointing at the correct backup folder.
+          All files in the selected songs are already present and up to date in the backup destination.
+          If you expected changes, confirm that you are pointing at the correct backup folder.
         </div>
       </div>
 
@@ -672,8 +831,7 @@
         <div class="problem">Song Backup skips a song folder entirely</div>
         <div class="solution">
           Song Backup only lists folders that contain at least one <code>.song</code> file
-          at the top level. If a folder is missing from the list, confirm it contains a
-          valid Studio One project file.
+          at the top level. Confirm the folder contains a valid Studio One project file.
         </div>
       </div>
 
@@ -688,10 +846,10 @@
       <div class="trouble-item">
         <div class="problem">Song ReNamer shows no suggestion chips</div>
         <div class="solution">
-          Suggestions come from <code>.song</code> files inside the folder whose names differ
-          from the folder name and don't match the default <code>Username_YYYY-MM-DD</code> pattern.
-          If all <code>.song</code> files use default names, no chips will appear — type the
-          new name directly in the <strong>New name</strong> field.
+          Suggestions come from <code>.song</code> files whose names differ from the folder name
+          and don't match the default <code>Username_YYYY-MM-DD</code> pattern.
+          If all <code>.song</code> files use default names, type the new name directly in the
+          <strong>New name</strong> field.
         </div>
       </div>
 
@@ -710,7 +868,6 @@
           Song ReNamer renames <code>.song</code> files whose stem exactly matches the old
           folder name, and Mixdown/Master audio files whose filename <em>starts with</em> the
           old name. Files with different names or in other subfolders are left unchanged by design.
-          Check the confirmation message for any per-file errors.
         </div>
       </div>
     </div>
@@ -718,7 +875,7 @@
   </div><!-- /content -->
 
   <footer>
-    Studio Pro Tools &nbsp;&middot;&nbsp; Built on .NET 10 | WPF | C# 14
+    Studio Pro Tools &nbsp;&middot;&nbsp; Built on .NET 10 | WPF | C# 14 &nbsp;&middot;&nbsp; Version 1.3
   </footer>
 
 </body>

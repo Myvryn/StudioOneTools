@@ -6,17 +6,16 @@
         mc:Ignorable="d"
         Title="Studio Pro Tools"
         Height="450"
-        Width="960"
+        Width="1100"
         MinHeight="420"
-        MinWidth="900"
+        MinWidth="1020"
         ResizeMode="CanResize"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <Style x:Key="ToolCardStyle" TargetType="Button">
-            <Setter Property="Width" Value="180" />
             <Setter Property="Height" Value="180" />
-            <Setter Property="Margin" Value="12" />
+            <Setter Property="Margin" Value="8" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="Background" Value="#FFFFFFFF" />
             <Setter Property="BorderBrush" Value="#FFD0D0D0" />
@@ -87,11 +86,11 @@
             </Button>
         </Grid>
 
-        <ScrollViewer Grid.Row="1"
-                      VerticalScrollBarVisibility="Auto">
-            <WrapPanel Margin="20,0,20,28"
-                       HorizontalAlignment="Center"
-                       Orientation="Horizontal">
+        <UniformGrid Grid.Row="1"
+                     Rows="1"
+                     Columns="6"
+                     Margin="16,8,16,16"
+                     VerticalAlignment="Center">
 
                 <Button Style="{StaticResource ToolCardStyle}"
                         Click="SongArchiverCard_OnClick">
@@ -114,6 +113,30 @@
                                    TextAlignment="Center"
                                    TextWrapping="Wrap"
                                    Text="Archive song folders and manage media files." />
+                    </StackPanel>
+                </Button>
+
+                <Button Style="{StaticResource ToolCardStyle}"
+                        Click="UnArchiverCard_OnClick">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                   FontSize="44"
+                                   Foreground="#FF1068A8"
+                                   HorizontalAlignment="Center"
+                                   Text="&#xE8B6;" />
+                        <TextBlock Margin="0,12,0,0"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"
+                                   Text="Un-Archiver" />
+                        <TextBlock Margin="10,5,10,0"
+                                   FontSize="11"
+                                   Foreground="#FF888888"
+                                   HorizontalAlignment="Center"
+                                   MaxWidth="140"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="Restore an archived song and fix its internal paths." />
                     </StackPanel>
                 </Button>
 
@@ -189,7 +212,30 @@
                     </StackPanel>
                 </Button>
 
-            </WrapPanel>
-        </ScrollViewer>
+                <Button Style="{StaticResource ToolCardStyle}"
+                        Click="PathFixerCard_OnClick">
+                    <StackPanel HorizontalAlignment="Center">
+                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                   FontSize="44"
+                                   Foreground="#FF00776F"
+                                   HorizontalAlignment="Center"
+                                   Text="&#xE8AB;" />
+                        <TextBlock Margin="0,12,0,0"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"
+                                   Text="Path Fixer" />
+                        <TextBlock Margin="10,5,10,0"
+                                   FontSize="11"
+                                   Foreground="#FF888888"
+                                   HorizontalAlignment="Center"
+                                   MaxWidth="160"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"
+                                   Text="Fix broken media paths after a song is restored to a new location." />
+                    </StackPanel>
+                </Button>
+
+        </UniformGrid>
     </Grid>
 </Window>
