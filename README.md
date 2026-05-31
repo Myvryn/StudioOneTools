@@ -253,6 +253,11 @@ All files are already up to date in the backup destination. If you expected chan
 **Folder Sweeper flags folders I want to keep**
 Leave those checkboxes unchecked before clicking Delete. Nothing is removed without explicit selection and confirmation.
 
+## License
+**This tool is provided as-is for Studio One users. Please ensure you have backups before using the Folder Sweeper deletion feature.**
+
+© 2026 Edwin Steven Jones. All rights reserved.
+Unauthorized copying of this file, via any medium, is strictly prohibited.
 ---
 
 **Version:** 1.3
