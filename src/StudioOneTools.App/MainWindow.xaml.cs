@@ -265,13 +265,17 @@ public partial class MainWindow : Window
 
             _viewModel.StatusMessage = $"Archive created successfully: {archiveResult.ArchiveFilePath}";
 
-            // Show combined dialog with delete question and open folder checkbox
+            // Show combined dialog with post-archive options
+            var songFolderPath = Path.GetFullPath(_viewModel.SourceFolderPath);
             var completeDialog = new ArchiveCompleteDialog(archiveResult.ArchiveFilePath) { Owner = this };
             if (completeDialog.ShowDialog() == true)
             {
+                if (completeDialog.RemoveFromRecentDocuments)
+                    StudioOneRecentDocumentsService.RemoveSongsInFolders([songFolderPath]);
+
                 if (completeDialog.DeleteOriginalFolder)
                 {
-                    Directory.Delete(Path.GetFullPath(_viewModel.SourceFolderPath), recursive: true);
+                    Directory.Delete(songFolderPath, recursive: true);
                     _viewModel.StatusMessage = $"Archive created and original folder deleted: {archiveResult.ArchiveFilePath}";
                     ResetAnalysis(clearPaths: true);
                 }

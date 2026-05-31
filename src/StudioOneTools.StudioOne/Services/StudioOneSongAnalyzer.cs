@@ -554,14 +554,27 @@ public sealed class StudioOneSongAnalyzer : IStudioOneSongAnalyzer
             ? fullMediaPath
             : fullMediaPath + Path.DirectorySeparatorChar;
 
-        if (!localPath.StartsWith(normalizedMediaPath, StringComparison.OrdinalIgnoreCase))
+        // Primary: song is in the same location as when it was saved.
+        if (localPath.StartsWith(normalizedMediaPath, StringComparison.OrdinalIgnoreCase))
         {
-            return false;
+            relativePath = NormalizeRelativePath(Path.GetRelativePath(fullMediaPath, localPath));
+            return !string.IsNullOrWhiteSpace(relativePath);
         }
 
-        relativePath = NormalizeRelativePath(Path.GetRelativePath(fullMediaPath, localPath));
+        // Fallback: song has been moved. The media pool records the absolute path at save
+        // time, but the internal structure of the Media folder is preserved after relocation.
+        // Extract the portion of the stored path that follows the "\Media\" segment.
+        var normalizedLocal = localPath.Replace('/', Path.DirectorySeparatorChar);
+        var mediaSegment    = Path.DirectorySeparatorChar + "Media" + Path.DirectorySeparatorChar;
+        var mediaIndex      = normalizedLocal.IndexOf(mediaSegment, StringComparison.OrdinalIgnoreCase);
 
-        return !string.IsNullOrWhiteSpace(relativePath);
+        if (mediaIndex >= 0)
+        {
+            relativePath = NormalizeRelativePath(normalizedLocal.Substring(mediaIndex + mediaSegment.Length));
+            return !string.IsNullOrWhiteSpace(relativePath);
+        }
+
+        return false;
     }
 
     private static Dictionary<string, string> GetActualMediaFiles(string mediaFolderPath)
