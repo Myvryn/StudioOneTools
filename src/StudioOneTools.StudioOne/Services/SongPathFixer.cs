@@ -52,7 +52,7 @@ public sealed class SongPathFixer : ISongPathFixer
         }
 
         var oldPrefix    = ToUrlPrefix(analysis.StoredSongFolderPath);
-        var newPrefix    = ToUrlPrefix(analysis.CurrentSongFolderPath);
+        var newPrefix    = XmlEscape(ToUrlPrefix(analysis.CurrentSongFolderPath));
         var pathsUpdated = RewriteZip(analysis.SongFilePath, oldPrefix, newPrefix);
 
         return new SongPathFixResult
@@ -117,6 +117,18 @@ public sealed class SongPathFixer : ISongPathFixer
         return "file:///" + normalized + "/";
     }
 
+    // Studio One's XML files may contain any of the five predefined XML entities in a folder
+    // name (e.g. "&" in "The Hungry & the Cold"). Because the replacement path comes straight
+    // from the filesystem, it must be escaped before being spliced back into XML text, or the
+    // result is not well-formed and Studio One will refuse to load the file as "corrupted".
+    private static string XmlEscape(string value) =>
+        value
+            .Replace("&", "&amp;")
+            .Replace("<", "&lt;")
+            .Replace(">", "&gt;")
+            .Replace("\"", "&quot;")
+            .Replace("'", "&apos;");
+
     private static int CountOccurrences(ZipArchive archive, string urlPrefix)
     {
         var escaped = Regex.Escape(urlPrefix);
@@ -156,7 +168,7 @@ public sealed class SongPathFixer : ISongPathFixer
                     {
                         using var reader       = new StreamReader(srcStream, Encoding.UTF8);
                         var       content      = reader.ReadToEnd();
-                        var       fixedContent = Regex.Replace(content, escaped, newUrlPrefix, RegexOptions.IgnoreCase);
+                        var       fixedContent = Regex.Replace(content, escaped, _ => newUrlPrefix, RegexOptions.IgnoreCase);
 
                         if (!string.Equals(content, fixedContent, StringComparison.Ordinal))
                         {
