@@ -1,0 +1,101 @@
+<!--
+    Six Walls brand tokens for "Six Walls - Tools for Studio One | Studio Pro".
+
+    This is the single place brand colour / type is defined. Today the app keeps
+    its light Fluent look and only the *accents* are Six Walls (blue + orange).
+    Every token below also lists its dark-chassis value (from the Six Walls
+    plugins: The Room / The Overhead(s)) so a later full dark reskin is a
+    one-file change - swap the Color values here, nothing else.
+
+    Neutral greys are routed through tokens too (SwWindowBrush, SwSurfaceBrush,
+    SwHairlineBrush, SwTextDimBrush...) purely as hooks for that later switch.
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ============================================================= -->
+    <!--  Palette - Colors  (light value now // dark-chassis value)     -->
+    <!-- ============================================================= -->
+
+    <!-- Surfaces -->
+    <Color x:Key="SwWindowColor">#FFF4F4F4</Color>   <!-- dark: #FF0B0E13 -->
+    <Color x:Key="SwSurfaceColor">#FFFFFFFF</Color>  <!-- dark: #FF11161E -->
+    <Color x:Key="SwSurfaceAltColor">#FFF7F8FA</Color><!-- dark: #FF171D27 -->
+    <Color x:Key="SwOverlayColor">#CC202020</Color>  <!-- busy-overlay scrim -->
+
+    <!-- Lines -->
+    <Color x:Key="SwHairlineColor">#FFD0D0D0</Color> <!-- dark: #FF2B3543 -->
+    <Color x:Key="SwHairlineSoftColor">#FFCCCCCC</Color><!-- dark: #FF2B3543 -->
+
+    <!-- Text -->
+    <Color x:Key="SwTextColor">#FF1B1B1B</Color>     <!-- dark: #FFE7ECF3 -->
+    <Color x:Key="SwTextDimColor">#FF666666</Color>  <!-- dark: #FF8A94A2 -->
+    <Color x:Key="SwTextFaintColor">#FF888888</Color><!-- dark: #FF8A94A2 -->
+
+    <!-- Six Walls accent - blue.  Light-tuned primary + the brighter plugin
+         chassis blue kept alongside for the dark reskin / glows. -->
+    <Color x:Key="SwAccentColor">#FF2F7FD0</Color>        <!-- dark: #FF3F9DFF -->
+    <Color x:Key="SwAccentBrightColor">#FF3F9DFF</Color>
+    <Color x:Key="SwAccentHoverColor">#FF2A70BC</Color>   <!-- dark: #FF57ABFF -->
+    <Color x:Key="SwAccentDeepColor">#FF0A4D7C</Color>    <!-- dark: #FF2A4D6D -->
+    <Color x:Key="SwAccentWashColor">#FFEAF2FB</Color>    <!-- dark: #1A3F9DFF -->
+    <Color x:Key="SwAccentWashHoverColor">#FFDCEAF8</Color><!-- dark: #243F9DFF -->
+    <Color x:Key="SwAccentPressColor">#FFD6E6F6</Color>   <!-- dark: #333F9DFF -->
+    <Color x:Key="SwAccentBorderColor">#FFBBD5EE</Color>  <!-- dark: #FF2A4D6D -->
+    <Color x:Key="SwAccentDisabledColor">#FFC7DCF0</Color><!-- dark: #FF20303F -->
+    <Color x:Key="SwOnAccentColor">#FFFFFFFF</Color>      <!-- dark: #FF06121A -->
+    <Color x:Key="SwOnAccentDisabledColor">#FF8FB6DA</Color><!-- dark: #FF5A6B7A -->
+
+    <!-- Six Walls accent - warm.  Orange = the mark / "source" colour, amber =
+         the thin hairline accent on the web site. -->
+    <Color x:Key="SwOrangeColor">#FFD9631F</Color>       <!-- plugin: #FFE8843A -->
+    <Color x:Key="SwAmberColor">#FFC9A24B</Color>
+
+    <!-- ============================================================= -->
+    <!--  Palette - Brushes  (bind XAML to these, never the Color)      -->
+    <!-- ============================================================= -->
+
+    <SolidColorBrush x:Key="SwWindowBrush"       Color="{StaticResource SwWindowColor}" />
+    <SolidColorBrush x:Key="SwSurfaceBrush"      Color="{StaticResource SwSurfaceColor}" />
+    <SolidColorBrush x:Key="SwSurfaceAltBrush"   Color="{StaticResource SwSurfaceAltColor}" />
+    <SolidColorBrush x:Key="SwOverlayBrush"      Color="{StaticResource SwOverlayColor}" />
+
+    <SolidColorBrush x:Key="SwHairlineBrush"     Color="{StaticResource SwHairlineColor}" />
+    <SolidColorBrush x:Key="SwHairlineSoftBrush" Color="{StaticResource SwHairlineSoftColor}" />
+
+    <SolidColorBrush x:Key="SwTextBrush"         Color="{StaticResource SwTextColor}" />
+    <SolidColorBrush x:Key="SwTextDimBrush"      Color="{StaticResource SwTextDimColor}" />
+    <SolidColorBrush x:Key="SwTextFaintBrush"    Color="{StaticResource SwTextFaintColor}" />
+
+    <SolidColorBrush x:Key="SwAccentBrush"          Color="{StaticResource SwAccentColor}" />
+    <SolidColorBrush x:Key="SwAccentBrightBrush"    Color="{StaticResource SwAccentBrightColor}" />
+    <SolidColorBrush x:Key="SwAccentHoverBrush"     Color="{StaticResource SwAccentHoverColor}" />
+    <SolidColorBrush x:Key="SwAccentDeepBrush"      Color="{StaticResource SwAccentDeepColor}" />
+    <SolidColorBrush x:Key="SwAccentWashBrush"      Color="{StaticResource SwAccentWashColor}" />
+    <SolidColorBrush x:Key="SwAccentWashHoverBrush" Color="{StaticResource SwAccentWashHoverColor}" />
+    <SolidColorBrush x:Key="SwAccentPressBrush"     Color="{StaticResource SwAccentPressColor}" />
+    <SolidColorBrush x:Key="SwAccentBorderBrush"    Color="{StaticResource SwAccentBorderColor}" />
+    <SolidColorBrush x:Key="SwAccentDisabledBrush"  Color="{StaticResource SwAccentDisabledColor}" />
+    <SolidColorBrush x:Key="SwOnAccentBrush"        Color="{StaticResource SwOnAccentColor}" />
+    <SolidColorBrush x:Key="SwOnAccentDisabledBrush" Color="{StaticResource SwOnAccentDisabledColor}" />
+
+    <SolidColorBrush x:Key="SwOrangeBrush"       Color="{StaticResource SwOrangeColor}" />
+    <SolidColorBrush x:Key="SwAmberBrush"        Color="{StaticResource SwAmberColor}" />
+
+    <!-- Per-tool marker hues, harmonised to the Six Walls blue/teal/warm range. -->
+    <SolidColorBrush x:Key="SwToolArchiverBrush"   Color="#FF2F7FD0" />
+    <SolidColorBrush x:Key="SwToolUnArchiverBrush" Color="#FF3F9DFF" />
+    <SolidColorBrush x:Key="SwToolSweeperBrush"    Color="#FFD9631F" />
+    <SolidColorBrush x:Key="SwToolBackupBrush"     Color="#FF2B8299" />
+    <SolidColorBrush x:Key="SwToolRenamerBrush"    Color="#FF6E7DA8" />
+    <SolidColorBrush x:Key="SwToolPathFixerBrush"  Color="#FF3AA8C4" />
+
+    <!-- ============================================================= -->
+    <!--  Type - bundled OFL faces, with safe fallbacks                 -->
+    <!-- ============================================================= -->
+
+    <FontFamily x:Key="SwFontDisplay">pack://application:,,,/Branding/Fonts/#Orbitron</FontFamily>
+    <FontFamily x:Key="SwFontHeading">pack://application:,,,/Branding/Fonts/#Rajdhani</FontFamily>
+    <FontFamily x:Key="SwFontMono">pack://application:,,,/Branding/Fonts/#IBM Plex Mono</FontFamily>
+
+</ResourceDictionary>

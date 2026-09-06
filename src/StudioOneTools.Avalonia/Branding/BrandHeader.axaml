@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:branding="clr-namespace:StudioOneTools.Avalonia.Branding"
+             x:Class="StudioOneTools.Avalonia.Branding.BrandHeader"
+             x:Name="Root">
+
+    <StackPanel>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Image Source="avares://StudioOneTools.Avalonia/Branding/Assets/six_walls_mark.png"
+                   Width="42" Height="42"
+                   VerticalAlignment="Center" />
+
+            <TextBlock Margin="16,0,0,0"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource SwFontDisplay}"
+                       FontSize="24">
+                <Run Text="SIX " Foreground="{StaticResource SwTextBrush}" />
+                <Run Text="WALLS" Foreground="{StaticResource SwOrangeBrush}" />
+            </TextBlock>
+
+            <TextBlock Margin="19,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource SwTextDimBrush}"
+                       FontFamily="{StaticResource SwFontHeading}"
+                       FontSize="21"
+                       Text="{Binding #Root.Product}" />
+        </StackPanel>
+
+        <TextBlock Margin="0,16,0,0"
+                   FontSize="38"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource SwTextBrush}"
+                   IsVisible="{Binding #Root.HasScreen}"
+                   Text="{Binding #Root.Screen}" />
+
+        <TextBlock Margin="0,10,0,0"
+                   FontSize="21"
+                   Foreground="{StaticResource SwTextDimBrush}"
+                   IsVisible="{Binding #Root.HasCaption}"
+                   Text="{Binding #Root.Caption}" />
+    </StackPanel>
+</UserControl>

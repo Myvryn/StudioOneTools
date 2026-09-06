@@ -1,10 +1,13 @@
-# Studio Pro Tools
+# Six Walls — Tools for Studio One | Studio Pro
 
-A comprehensive utility suite for managing and archiving **PreSonus Studio One** music production projects.
+A comprehensive utility suite for managing and archiving **PreSonus Studio One**
+(and Fender Studio Pro) music production projects. Part of the **Six Walls** family
+of audio tools by Eddy Jones.
 
 ## Overview
 
-**Studio Pro Tools** provides six integrated applications to streamline your Studio One workflow:
+**Six Walls — Tools for Studio One | Studio Pro** provides six integrated
+applications to streamline your Studio One workflow:
 
 1. **Song Archiver** – Analyse, inspect, and create optimised ZIP archives of your Studio One songs with detailed HTML documentation
 2. **Un-Archiver** – Restore a song from an archive ZIP and automatically fix its internal file paths
@@ -126,8 +129,10 @@ A comprehensive utility suite for managing and archiving **PreSonus Studio One**
 
 ### Running the Application
 
-1. **Download** `StudioOneTools.exe` from the `publish/` folder
-2. **Run** the executable — no installation required (portable)
+1. **Download** the latest **Six Walls — Tools for Studio One | Studio Pro** build
+   (`StudioOneTools.App.exe`) from [sixwalls.net](https://sixwalls.net/), or from the
+   `publish/` folder in this repo
+2. **Run** the executable — no installation required (portable, single file)
 3. Choose your tool from the home screen
 
 ### Song Archiver Workflow
@@ -255,6 +260,7 @@ Leave those checkboxes unchecked before clicking Delete. Nothing is removed with
 
 ---
 
+**Six Walls** — audio tools by Eddy Jones
 **Version:** 1.3
 **Built on:** .NET 10 | WPF | C# 14
 **Last Updated:** 2026

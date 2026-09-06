@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:StudioOneTools.App.Converters"
+        xmlns:branding="clr-namespace:StudioOneTools.App.Branding"
         mc:Ignorable="d"
-        Title="Studio Pro Tools - Archiver"
+        Title="Six Walls — Song Archiver"
+        Icon="pack://application:,,,/Branding/Assets/six_walls_mark.png"
         Height="780"
         Width="1180"
         MinHeight="720"
@@ -38,10 +40,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0"
-                       FontSize="24"
-                       FontWeight="SemiBold"
-                       Text="Studio One Song Archiver" />
+            <branding:BrandHeader Grid.Column="0" Screen="Song Archiver" />
 
             <Button Grid.Column="1"
                     Padding="16,6"
@@ -132,7 +131,7 @@
             <Border Grid.Row="0"
                     Margin="0,0,0,12"
                     Padding="12"
-                    BorderBrush="#FFCCCCCC"
+                    BorderBrush="{StaticResource SwHairlineSoftBrush}"
                     BorderThickness="1"
                     CornerRadius="6">
                 <Grid>
@@ -164,7 +163,7 @@
                         <TextBlock FontWeight="SemiBold" Text="Preview" />
                         <TextBlock Margin="0,4,0,0"
                                    FontSize="11"
-                                   Foreground="#FF666666"
+                                   Foreground="{StaticResource SwTextDimBrush}"
                                    Text="{Binding PreviewLabel}"
                                    TextWrapping="Wrap"
                                    MaxWidth="180" />
@@ -236,8 +235,8 @@
                 Grid.ColumnSpan="2"
                 Margin="0,12,0,0"
                 Padding="10"
-                Background="#FFF4F4F4"
-                BorderBrush="#FFD0D0D0"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
                 BorderThickness="1"
                 CornerRadius="6">
             <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
@@ -247,7 +246,7 @@
               Grid.RowSpan="6"
               Grid.Column="0"
               Grid.ColumnSpan="2"
-              Background="#CC202020"
+              Background="{StaticResource SwOverlayBrush}"
               Visibility="{Binding IsArchiving, Converter={StaticResource BoolToVisibility}}">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center">

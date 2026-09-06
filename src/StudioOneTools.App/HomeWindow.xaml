@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:branding="clr-namespace:StudioOneTools.App.Branding"
         mc:Ignorable="d"
-        Title="Studio Pro Tools"
+        Title="Six Walls — Tools for Studio One | Studio Pro"
+        Icon="pack://application:,,,/Branding/Assets/six_walls_mark.png"
         Height="450"
         Width="1100"
         MinHeight="420"
@@ -17,8 +19,8 @@
             <Setter Property="Height" Value="180" />
             <Setter Property="Margin" Value="8" />
             <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="Background" Value="#FFFFFFFF" />
-            <Setter Property="BorderBrush" Value="#FFD0D0D0" />
+            <Setter Property="Background" Value="{StaticResource SwSurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource SwHairlineBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
             <Setter Property="Template">
@@ -34,11 +36,11 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="CardBorder" Property="Background" Value="#FFF0F6FF" />
-                                <Setter TargetName="CardBorder" Property="BorderBrush" Value="#FF0078D4" />
+                                <Setter TargetName="CardBorder" Property="Background" Value="{StaticResource SwAccentWashBrush}" />
+                                <Setter TargetName="CardBorder" Property="BorderBrush" Value="{StaticResource SwAccentBrush}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="CardBorder" Property="Background" Value="#FFDCE7F8" />
+                                <Setter TargetName="CardBorder" Property="Background" Value="{StaticResource SwAccentPressBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -47,7 +49,7 @@
         </Style>
     </Window.Resources>
 
-    <Grid Background="#FFF4F4F4">
+    <Grid Background="{StaticResource SwWindowBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -59,15 +61,9 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column="0" Margin="32,28,32,16">
-                <TextBlock FontSize="24"
-                           FontWeight="SemiBold"
-                           Text="Studio Pro Tools" />
-                <TextBlock Margin="0,6,0,0"
-                           FontSize="13"
-                           Foreground="#FF666666"
-                           Text="Select a tool to get started." />
-            </StackPanel>
+            <branding:BrandHeader Grid.Column="0"
+                                  Margin="32,28,32,16"
+                                  Caption="Select a tool to get started." />
 
             <Button Grid.Column="1"
                     Margin="0,0,28,0"
@@ -97,7 +93,7 @@
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock FontFamily="Segoe MDL2 Assets"
                                    FontSize="44"
-                                   Foreground="#FF0078D4"
+                                   Foreground="{StaticResource SwToolArchiverBrush}"
                                    HorizontalAlignment="Center"
                                    Text="&#xE8B7;" />
                         <TextBlock Margin="0,12,0,0"
@@ -107,7 +103,7 @@
                                    Text="Song Archiver" />
                         <TextBlock Margin="10,5,10,0"
                                    FontSize="11"
-                                   Foreground="#FF888888"
+                                   Foreground="{StaticResource SwTextFaintBrush}"
                                    HorizontalAlignment="Center"
                                    MaxWidth="160"
                                    TextAlignment="Center"
@@ -121,7 +117,7 @@
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock FontFamily="Segoe MDL2 Assets"
                                    FontSize="44"
-                                   Foreground="#FF1068A8"
+                                   Foreground="{StaticResource SwToolUnArchiverBrush}"
                                    HorizontalAlignment="Center"
                                    Text="&#xE8B6;" />
                         <TextBlock Margin="0,12,0,0"
@@ -131,7 +127,7 @@
                                    Text="Un-Archiver" />
                         <TextBlock Margin="10,5,10,0"
                                    FontSize="11"
-                                   Foreground="#FF888888"
+                                   Foreground="{StaticResource SwTextFaintBrush}"
                                    HorizontalAlignment="Center"
                                    MaxWidth="140"
                                    TextAlignment="Center"
@@ -145,7 +141,7 @@
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock FontFamily="Segoe MDL2 Assets"
                                    FontSize="44"
-                                   Foreground="#FFD45B07"
+                                   Foreground="{StaticResource SwToolSweeperBrush}"
                                    HorizontalAlignment="Center"
                                    Text="&#xE74D;" />
                         <TextBlock Margin="0,12,0,0"
@@ -155,7 +151,7 @@
                                    Text="Folder Sweeper" />
                         <TextBlock Margin="10,5,10,0"
                                    FontSize="11"
-                                   Foreground="#FF888888"
+                                   Foreground="{StaticResource SwTextFaintBrush}"
                                    HorizontalAlignment="Center"
                                    MaxWidth="160"
                                    TextAlignment="Center"
@@ -169,7 +165,7 @@
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock FontFamily="Segoe MDL2 Assets"
                                    FontSize="44"
-                                   Foreground="#FF107C41"
+                                   Foreground="{StaticResource SwToolBackupBrush}"
                                    HorizontalAlignment="Center"
                                    Text="&#xE74E;" />
                         <TextBlock Margin="0,12,0,0"
@@ -179,7 +175,7 @@
                                    Text="Song Backup" />
                         <TextBlock Margin="10,5,10,0"
                                    FontSize="11"
-                                   Foreground="#FF888888"
+                                   Foreground="{StaticResource SwTextFaintBrush}"
                                    HorizontalAlignment="Center"
                                    MaxWidth="160"
                                    TextAlignment="Center"
@@ -193,7 +189,7 @@
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock FontFamily="Segoe MDL2 Assets"
                                    FontSize="44"
-                                   Foreground="#FF7B2FBE"
+                                   Foreground="{StaticResource SwToolRenamerBrush}"
                                    HorizontalAlignment="Center"
                                    Text="&#xE8AC;" />
                         <TextBlock Margin="0,12,0,0"
@@ -203,7 +199,7 @@
                                    Text="Song ReNamer" />
                         <TextBlock Margin="10,5,10,0"
                                    FontSize="11"
-                                   Foreground="#FF888888"
+                                   Foreground="{StaticResource SwTextFaintBrush}"
                                    HorizontalAlignment="Center"
                                    MaxWidth="160"
                                    TextAlignment="Center"
@@ -217,7 +213,7 @@
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock FontFamily="Segoe MDL2 Assets"
                                    FontSize="44"
-                                   Foreground="#FF00776F"
+                                   Foreground="{StaticResource SwToolPathFixerBrush}"
                                    HorizontalAlignment="Center"
                                    Text="&#xE8AB;" />
                         <TextBlock Margin="0,12,0,0"
@@ -227,7 +223,7 @@
                                    Text="Path Fixer" />
                         <TextBlock Margin="10,5,10,0"
                                    FontSize="11"
-                                   Foreground="#FF888888"
+                                   Foreground="{StaticResource SwTextFaintBrush}"
                                    HorizontalAlignment="Center"
                                    MaxWidth="160"
                                    TextAlignment="Center"

@@ -1,0 +1,78 @@
+<!--
+    Six Walls brand tokens for "Six Walls - Tools for Studio One | Studio Pro".
+    Mirror of src/StudioOneTools.App/Branding/SixWallsBrand.xaml (WPF). Today only
+    the accents are Six Walls; every token lists its dark-chassis value so a later
+    full dark reskin is a one-file change.
+-->
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ===== Palette - Colors  (light now // dark-chassis) ===== -->
+    <Color x:Key="SwWindowColor">#FFF4F4F4</Color>       <!-- dark: #FF0B0E13 -->
+    <Color x:Key="SwSurfaceColor">#FFFFFFFF</Color>      <!-- dark: #FF11161E -->
+    <Color x:Key="SwSurfaceAltColor">#FFF7F8FA</Color>   <!-- dark: #FF171D27 -->
+    <Color x:Key="SwOverlayColor">#CC202020</Color>
+
+    <Color x:Key="SwHairlineColor">#FFD0D0D0</Color>     <!-- dark: #FF2B3543 -->
+    <Color x:Key="SwHairlineSoftColor">#FFCCCCCC</Color> <!-- dark: #FF2B3543 -->
+
+    <Color x:Key="SwTextColor">#FF1B1B1B</Color>         <!-- dark: #FFE7ECF3 -->
+    <Color x:Key="SwTextDimColor">#FF666666</Color>      <!-- dark: #FF8A94A2 -->
+    <Color x:Key="SwTextFaintColor">#FF888888</Color>    <!-- dark: #FF8A94A2 -->
+
+    <Color x:Key="SwAccentColor">#FF2F7FD0</Color>       <!-- dark: #FF3F9DFF -->
+    <Color x:Key="SwAccentBrightColor">#FF3F9DFF</Color>
+    <Color x:Key="SwAccentHoverColor">#FF2A70BC</Color>
+    <Color x:Key="SwAccentDeepColor">#FF0A4D7C</Color>   <!-- dark: #FF2A4D6D -->
+    <Color x:Key="SwAccentWashColor">#FFEAF2FB</Color>
+    <Color x:Key="SwAccentWashHoverColor">#FFDCEAF8</Color>
+    <Color x:Key="SwAccentPressColor">#FFD6E6F6</Color>
+    <Color x:Key="SwAccentBorderColor">#FFBBD5EE</Color>
+    <Color x:Key="SwAccentDisabledColor">#FFC7DCF0</Color>
+    <Color x:Key="SwOnAccentColor">#FFFFFFFF</Color>     <!-- dark: #FF06121A -->
+    <Color x:Key="SwOnAccentDisabledColor">#FF8FB6DA</Color>
+
+    <Color x:Key="SwOrangeColor">#FFD9631F</Color>      <!-- plugin: #FFE8843A -->
+    <Color x:Key="SwAmberColor">#FFC9A24B</Color>
+
+    <!-- ===== Palette - Brushes ===== -->
+    <SolidColorBrush x:Key="SwWindowBrush"       Color="{StaticResource SwWindowColor}" />
+    <SolidColorBrush x:Key="SwSurfaceBrush"      Color="{StaticResource SwSurfaceColor}" />
+    <SolidColorBrush x:Key="SwSurfaceAltBrush"   Color="{StaticResource SwSurfaceAltColor}" />
+    <SolidColorBrush x:Key="SwOverlayBrush"      Color="{StaticResource SwOverlayColor}" />
+
+    <SolidColorBrush x:Key="SwHairlineBrush"     Color="{StaticResource SwHairlineColor}" />
+    <SolidColorBrush x:Key="SwHairlineSoftBrush" Color="{StaticResource SwHairlineSoftColor}" />
+
+    <SolidColorBrush x:Key="SwTextBrush"         Color="{StaticResource SwTextColor}" />
+    <SolidColorBrush x:Key="SwTextDimBrush"      Color="{StaticResource SwTextDimColor}" />
+    <SolidColorBrush x:Key="SwTextFaintBrush"    Color="{StaticResource SwTextFaintColor}" />
+
+    <SolidColorBrush x:Key="SwAccentBrush"          Color="{StaticResource SwAccentColor}" />
+    <SolidColorBrush x:Key="SwAccentBrightBrush"    Color="{StaticResource SwAccentBrightColor}" />
+    <SolidColorBrush x:Key="SwAccentHoverBrush"     Color="{StaticResource SwAccentHoverColor}" />
+    <SolidColorBrush x:Key="SwAccentDeepBrush"      Color="{StaticResource SwAccentDeepColor}" />
+    <SolidColorBrush x:Key="SwAccentWashBrush"      Color="{StaticResource SwAccentWashColor}" />
+    <SolidColorBrush x:Key="SwAccentWashHoverBrush" Color="{StaticResource SwAccentWashHoverColor}" />
+    <SolidColorBrush x:Key="SwAccentPressBrush"     Color="{StaticResource SwAccentPressColor}" />
+    <SolidColorBrush x:Key="SwAccentBorderBrush"    Color="{StaticResource SwAccentBorderColor}" />
+    <SolidColorBrush x:Key="SwAccentDisabledBrush"  Color="{StaticResource SwAccentDisabledColor}" />
+    <SolidColorBrush x:Key="SwOnAccentBrush"         Color="{StaticResource SwOnAccentColor}" />
+    <SolidColorBrush x:Key="SwOnAccentDisabledBrush" Color="{StaticResource SwOnAccentDisabledColor}" />
+
+    <SolidColorBrush x:Key="SwOrangeBrush"       Color="{StaticResource SwOrangeColor}" />
+    <SolidColorBrush x:Key="SwAmberBrush"        Color="{StaticResource SwAmberColor}" />
+
+    <SolidColorBrush x:Key="SwToolArchiverBrush"   Color="#FF2F7FD0" />
+    <SolidColorBrush x:Key="SwToolUnArchiverBrush" Color="#FF3F9DFF" />
+    <SolidColorBrush x:Key="SwToolSweeperBrush"    Color="#FFD9631F" />
+    <SolidColorBrush x:Key="SwToolBackupBrush"     Color="#FF2B8299" />
+    <SolidColorBrush x:Key="SwToolRenamerBrush"    Color="#FF6E7DA8" />
+    <SolidColorBrush x:Key="SwToolPathFixerBrush"  Color="#FF3AA8C4" />
+
+    <!-- ===== Type - bundled OFL faces ===== -->
+    <FontFamily x:Key="SwFontDisplay">avares://StudioOneTools.Avalonia/Branding/Fonts/Orbitron-Bold.ttf#Orbitron</FontFamily>
+    <FontFamily x:Key="SwFontHeading">avares://StudioOneTools.Avalonia/Branding/Fonts/Rajdhani-SemiBold.ttf#Rajdhani</FontFamily>
+    <FontFamily x:Key="SwFontMono">avares://StudioOneTools.Avalonia/Branding/Fonts/IBMPlexMono-Regular.ttf#IBM Plex Mono</FontFamily>
+
+</ResourceDictionary>

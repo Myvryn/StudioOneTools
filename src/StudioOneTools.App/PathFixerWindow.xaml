@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:branding="clr-namespace:StudioOneTools.App.Branding"
         mc:Ignorable="d"
-        Title="Studio One Path Fixer"
+        Title="Six Walls — Path Fixer"
+        Icon="pack://application:,,,/Branding/Assets/six_walls_mark.png"
         Height="420"
         Width="720"
         MinHeight="380"
@@ -25,11 +27,9 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Grid.Row="0"
-                   Margin="0,0,0,12"
-                   FontSize="24"
-                   FontWeight="SemiBold"
-                   Text="Studio One Path Fixer" />
+        <branding:BrandHeader Grid.Row="0"
+                              Margin="0,0,0,12"
+                              Screen="Path Fixer" />
 
         <!-- Song file row -->
         <Grid Grid.Row="1"
@@ -62,7 +62,7 @@
         <Border Grid.Row="2"
                 Margin="0,0,0,12"
                 Padding="14"
-                BorderBrush="#FFCCCCCC"
+                BorderBrush="{StaticResource SwHairlineSoftBrush}"
                 BorderThickness="1"
                 CornerRadius="6">
             <Grid>
@@ -113,7 +113,7 @@
                     Click="FixButton_OnClick" />
             <TextBlock Margin="16,0,0,0"
                        VerticalAlignment="Center"
-                       Foreground="#FF888888"
+                       Foreground="{StaticResource SwTextFaintBrush}"
                        FontSize="11"
                        TextWrapping="Wrap"
                        MaxWidth="420"
@@ -124,8 +124,8 @@
         <Border Grid.Row="4"
                 Margin="0,8,0,0"
                 Padding="10"
-                Background="#FFF4F4F4"
-                BorderBrush="#FFD0D0D0"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
                 BorderThickness="1"
                 CornerRadius="6">
             <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
@@ -134,7 +134,7 @@
         <!-- Busy overlay -->
         <Grid Grid.Row="0"
               Grid.RowSpan="5"
-              Background="#CC202020"
+              Background="{StaticResource SwOverlayBrush}"
               Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center">

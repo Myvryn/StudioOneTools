@@ -1,0 +1,99 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:branding="clr-namespace:StudioOneTools.Avalonia.Branding"
+        x:Class="StudioOneTools.Avalonia.UnArchiverWindow"
+        Title="Six Walls — Un-Archiver"
+        Icon="/Branding/Assets/six_walls_mark.png"
+        Height="360"
+        Width="680"
+        MinHeight="320"
+        MinWidth="560"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="16" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
+
+        <!-- Title -->
+        <branding:BrandHeader Grid.Row="0"
+                              Margin="0,0,0,16"
+                              Screen="Un-Archiver" />
+
+        <!-- Archive file row -->
+        <Grid Grid.Row="1" Margin="0,0,0,12" ColumnDefinitions="120,*,Auto">
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Archive file" />
+            <TextBox Grid.Column="1"
+                     Padding="8,6"
+                     Text="{Binding ArchiveFilePath, Mode=TwoWay}"
+                     TextChanged="ArchiveFilePathTextBox_OnTextChanged" />
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Content="Browse..."
+                    Click="BrowseArchiveButton_OnClick" />
+        </Grid>
+
+        <!-- Destination folder row -->
+        <Grid Grid.Row="2" Margin="0,0,0,12" ColumnDefinitions="120,*,Auto">
+            <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Destination" />
+            <TextBox Grid.Column="1"
+                     Padding="8,6"
+                     Text="{Binding DestinationFolder, Mode=TwoWay}"
+                     TextChanged="DestinationFolderTextBox_OnTextChanged" />
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Content="Browse..."
+                    Click="BrowseDestinationButton_OnClick" />
+        </Grid>
+
+        <!-- Extract preview row -->
+        <Border Grid.Row="3"
+                Margin="0,0,0,12"
+                Padding="12"
+                BorderBrush="{StaticResource SwHairlineSoftBrush}"
+                BorderThickness="1"
+                CornerRadius="6">
+            <Grid ColumnDefinitions="120,*">
+                <TextBlock Grid.Column="0" FontWeight="SemiBold" Text="Will extract to" />
+                <TextBlock Grid.Column="1"
+                           TextWrapping="Wrap"
+                           Text="{Binding ExtractedToPath}" />
+            </Grid>
+        </Border>
+
+        <!-- Extract button -->
+        <StackPanel Grid.Row="4"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+            <Button Padding="16,6"
+                    IsEnabled="{Binding CanExtract}"
+                    Content="Extract &amp; Fix Paths"
+                    Click="ExtractButton_OnClick" />
+        </StackPanel>
+
+        <!-- Status bar -->
+        <Border Grid.Row="5"
+                Margin="0,8,0,0"
+                Padding="10"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
+                BorderThickness="1"
+                CornerRadius="6">
+            <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
+        </Border>
+
+        <!-- Busy overlay -->
+        <Grid Grid.Row="0"
+              Grid.RowSpan="6"
+              Background="{StaticResource SwOverlayBrush}"
+              IsVisible="{Binding IsBusy}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressBar IsIndeterminate="True" Width="300" Height="6" />
+                <TextBlock Margin="0,16,0,0"
+                           Foreground="White"
+                           FontSize="15"
+                           HorizontalAlignment="Center"
+                           Text="Extracting and fixing paths, please wait…" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

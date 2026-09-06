@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:branding="clr-namespace:StudioOneTools.App.Branding"
         mc:Ignorable="d"
-        Title="Studio One Un-Archiver"
+        Title="Six Walls — Un-Archiver"
+        Icon="pack://application:,,,/Branding/Assets/six_walls_mark.png"
         Height="360"
         Width="680"
         MinHeight="320"
@@ -26,11 +28,9 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Grid.Row="0"
-                   Margin="0,0,0,16"
-                   FontSize="24"
-                   FontWeight="SemiBold"
-                   Text="Studio One Un-Archiver" />
+        <branding:BrandHeader Grid.Row="0"
+                              Margin="0,0,0,16"
+                              Screen="Un-Archiver" />
 
         <!-- Archive file row -->
         <Grid Grid.Row="1" Margin="0,0,0,12">
@@ -74,7 +74,7 @@
         <Border Grid.Row="3"
                 Margin="0,0,0,12"
                 Padding="12"
-                BorderBrush="#FFCCCCCC"
+                BorderBrush="{StaticResource SwHairlineSoftBrush}"
                 BorderThickness="1"
                 CornerRadius="6">
             <Grid>
@@ -103,8 +103,8 @@
         <Border Grid.Row="5"
                 Margin="0,8,0,0"
                 Padding="10"
-                Background="#FFF4F4F4"
-                BorderBrush="#FFD0D0D0"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
                 BorderThickness="1"
                 CornerRadius="6">
             <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
@@ -113,7 +113,7 @@
         <!-- Busy overlay -->
         <Grid Grid.Row="0"
               Grid.RowSpan="6"
-              Background="#CC202020"
+              Background="{StaticResource SwOverlayBrush}"
               Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ProgressBar IsIndeterminate="True" Width="300" Height="6" />

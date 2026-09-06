@@ -8,12 +8,33 @@ namespace StudioOneTools.StudioOne.Services;
 /// </summary>
 public static class StudioOneRecentDocumentsService
 {
-    private static readonly string[] KnownSettingsPaths =
-    [
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Fender",   "Studio Pro 8", "RecentDocuments.settings"),
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PreSonus", "Studio One 6", "RecentDocuments.settings"),
-        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PreSonus", "Studio One 5", "RecentDocuments.settings"),
-    ];
+    private static readonly string[] KnownSettingsPaths = BuildKnownSettingsPaths();
+
+    private static string[] BuildKnownSettingsPaths()
+    {
+        if (OperatingSystem.IsMacOS())
+        {
+            // Best guess, unverified pending a real macOS Studio One / Studio Pro install.
+            var appSupport = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                "Library", "Application Support");
+
+            return
+            [
+                Path.Combine(appSupport, "Fender",   "Studio Pro 8", "RecentDocuments.settings"),
+                Path.Combine(appSupport, "PreSonus", "Studio One 6", "RecentDocuments.settings"),
+                Path.Combine(appSupport, "PreSonus", "Studio One 5", "RecentDocuments.settings"),
+            ];
+        }
+
+        var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        return
+        [
+            Path.Combine(appData, "Fender",   "Studio Pro 8", "RecentDocuments.settings"),
+            Path.Combine(appData, "PreSonus", "Studio One 6", "RecentDocuments.settings"),
+            Path.Combine(appData, "PreSonus", "Studio One 5", "RecentDocuments.settings"),
+        ];
+    }
 
     /// <summary>
     /// Removes all recent-document entries whose paths fall under any of the given
