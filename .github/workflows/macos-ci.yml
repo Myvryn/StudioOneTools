@@ -2,9 +2,9 @@ name: macOS CI
 
 on:
   push:
-    branches: [main]
+    branches: [trunk]
   pull_request:
-    branches: [main]
+    branches: [trunk]
   workflow_dispatch:
 
 jobs:
