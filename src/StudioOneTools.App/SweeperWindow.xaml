@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:branding="clr-namespace:StudioOneTools.App.Branding"
         mc:Ignorable="d"
-        Title="Studio One Folder Sweeper"
+        Title="Six Walls — Folder Sweeper"
+        Icon="pack://application:,,,/Branding/Assets/six_walls_mark.png"
         Height="600"
         Width="960"
         MinHeight="480"
@@ -25,11 +27,9 @@
         </Grid.RowDefinitions>
 
         <!-- Title -->
-        <TextBlock Grid.Row="0"
-                   Margin="0,0,0,12"
-                   FontSize="24"
-                   FontWeight="SemiBold"
-                   Text="Studio One Folder Sweeper" />
+        <branding:BrandHeader Grid.Row="0"
+                              Margin="0,0,0,12"
+                              Screen="Folder Sweeper" />
 
         <!-- Root folder row -->
         <Grid Grid.Row="1"
@@ -158,8 +158,8 @@
         <Border Grid.Row="4"
                 Margin="0,8,0,0"
                 Padding="10"
-                Background="#FFF4F4F4"
-                BorderBrush="#FFD0D0D0"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
                 BorderThickness="1"
                 CornerRadius="6">
             <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
@@ -168,7 +168,7 @@
         <!-- Busy overlay -->
         <Grid Grid.Row="0"
               Grid.RowSpan="5"
-              Background="#CC202020"
+              Background="{StaticResource SwOverlayBrush}"
               Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center">

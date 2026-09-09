@@ -1,0 +1,38 @@
+name: macOS CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # StudioOneTools.App (WPF/WinForms, net10.0-windows) is intentionally excluded --
+      # it cannot build on macOS runners (no Windows Desktop SDK workload there).
+      - name: Build (Core, StudioOne, Avalonia, Tests)
+        run: |
+          dotnet build src/StudioOneTools.Core/StudioOneTools.Core.csproj --configuration Release
+          dotnet build src/StudioOneTools.StudioOne/StudioOneTools.StudioOne.csproj --configuration Release
+          dotnet build src/StudioOneTools.Avalonia/StudioOneTools.Avalonia.csproj --configuration Release
+          dotnet build tests/StudioOneTools.Tests/StudioOneTools.Tests.csproj --configuration Release
+
+      - name: Test
+        run: dotnet test tests/StudioOneTools.Tests/StudioOneTools.Tests.csproj --configuration Release
+
+      - name: Publish smoke build (osx-arm64)
+        run: >
+          dotnet publish src/StudioOneTools.Avalonia/StudioOneTools.Avalonia.csproj
+          --configuration Release
+          --runtime osx-arm64
+          --self-contained true
+          -p:PublishSingleFile=true

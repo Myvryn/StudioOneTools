@@ -1,0 +1,79 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="StudioOneTools.Avalonia.SettingsWindow"
+        Title="Six Walls — Settings"
+        Icon="/Branding/Assets/six_walls_mark.png"
+        Height="300"
+        Width="600"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+    <Grid Margin="16" RowDefinitions="Auto,Auto,Auto,*,Auto">
+
+        <TextBlock Grid.Row="0"
+                   Margin="0,0,0,16"
+                   FontSize="18"
+                   FontWeight="SemiBold"
+                   Text="Application Settings" />
+
+        <!-- Default Song Folder -->
+        <Grid Grid.Row="1" Margin="0,0,0,12" ColumnDefinitions="160,*,Auto">
+            <TextBlock Grid.Column="0"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Text="Default song folder" />
+
+            <TextBox x:Name="DefaultSongFolderTextBox"
+                     Grid.Column="1"
+                     Padding="8,6"
+                     Text="{Binding DefaultSongFolder, Mode=TwoWay}" />
+
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Content="Browse..."
+                    Click="BrowseSongFolderButton_OnClick" />
+        </Grid>
+
+        <!-- Default Archive Folder -->
+        <Grid Grid.Row="2" Margin="0,0,0,12" ColumnDefinitions="160,*,Auto">
+            <TextBlock Grid.Column="0"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Text="Default archive folder" />
+
+            <TextBox x:Name="DefaultArchiveFolderTextBox"
+                     Grid.Column="1"
+                     Padding="8,6"
+                     Text="{Binding DefaultArchiveFolder, Mode=TwoWay}" />
+
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Content="Browse..."
+                    Click="BrowseArchiveFolderButton_OnClick" />
+        </Grid>
+
+        <!-- Debug Mode -->
+        <CheckBox Grid.Row="3"
+                  Margin="0,0,0,12"
+                  VerticalAlignment="Top"
+                  IsChecked="{Binding DebugMode, Mode=TwoWay}"
+                  Content="Enable Debug Mode (generates _DEBUG folder with XML files)" />
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="4"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Spacing="8">
+            <Button Padding="16,6"
+                    IsCancel="True"
+                    Content="Cancel"
+                    Click="CancelButton_OnClick" />
+            <Button Padding="16,6"
+                    IsDefault="True"
+                    Content="OK"
+                    Click="OKButton_OnClick" />
+        </StackPanel>
+    </Grid>
+</Window>

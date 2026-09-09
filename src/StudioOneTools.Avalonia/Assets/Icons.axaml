@@ -1,0 +1,44 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+      Simple stroke-based line icons (24x24 viewbox), replacing the Windows-only
+      "Segoe MDL2 Assets" glyphs used by the WPF app. Render via:
+        <Path Data="{StaticResource IconSettings}" Stroke="..." StrokeThickness="1.8"
+              StrokeLineCap="Round" StrokeLineJoin="Round" Fill="Transparent"
+              Width="44" Height="44" Stretch="Uniform"/>
+    -->
+
+    <StreamGeometry x:Key="IconSettings">
+        M4,12 A8,8 0 1 0 20,12 A8,8 0 1 0 4,12
+        M9,12 A3,3 0 1 0 15,12 A3,3 0 1 0 9,12
+        M17,12 L20,12
+        M14.5,7.67 L16,5.07
+        M9.5,7.67 L8,5.07
+        M7,12 L4,12
+        M9.5,16.33 L8,18.93
+        M14.5,16.33 L16,18.93
+    </StreamGeometry>
+
+    <StreamGeometry x:Key="IconPathFixer">
+        M4,13 L9,18 L20,6
+    </StreamGeometry>
+
+    <StreamGeometry x:Key="IconUnArchiver">
+        M4,21 L20,21 L20,14 L4,14 Z
+        M12,12 L12,3
+        M7,8 L12,3 L17,8
+    </StreamGeometry>
+
+    <StreamGeometry x:Key="IconBackup">
+        M12,20 L12,6
+        M6,11 L12,5 L18,11
+        M4,21 L20,21
+    </StreamGeometry>
+
+    <StreamGeometry x:Key="IconSweeper">
+        M6,4 L14,14
+        M13,13 L8,21 L12,16 L16,21 L15,13 Z
+    </StreamGeometry>
+
+</ResourceDictionary>

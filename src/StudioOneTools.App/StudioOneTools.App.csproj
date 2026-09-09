@@ -9,6 +9,26 @@
     <EmbeddedResource Include="Help\StudioProToolsHelp.html" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Six Walls brand assets: bundled OFL fonts + logo art. -->
+    <Resource Include="Branding\Fonts\*.ttf" />
+    <Resource Include="Branding\Assets\*.png" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <!-- Shipped identity. Without these the exe reports its assembly name
+         ("StudioOneTools.App") as both Product and Company, which is what
+         shows in file properties and alongside the Authenticode signature.
+         "Tools for Studio One" matches how the product is named on the site. -->
+    <ApplicationIcon>Branding\Assets\app.ico</ApplicationIcon>
+    <Product>Tools for Studio One</Product>
+    <AssemblyTitle>Tools for Studio One</AssemblyTitle>
+    <Company>Six Walls</Company>
+    <Copyright>Copyright © Six Walls</Copyright>
+    <Version>1.3.0</Version>
+    <FileVersion>1.3.0.0</FileVersion>
+  </PropertyGroup>
+
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>

@@ -1,0 +1,255 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:branding="clr-namespace:StudioOneTools.Avalonia.Branding"
+        x:Class="StudioOneTools.Avalonia.HomeWindow"
+        Title="Six Walls — Tools for Studio One | Studio Pro"
+        Icon="/Branding/Assets/six_walls_mark.png"
+        Width="1100"
+        Height="450"
+        MinWidth="1020"
+        MinHeight="420"
+        CanResize="True"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Styles>
+        <Style Selector="Button.card">
+            <Setter Property="Height" Value="180" />
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Background" Value="{StaticResource SwSurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource SwHairlineBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="CardBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="10">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Button.card:pointerover /template/ Border#CardBorder">
+            <Setter Property="Background" Value="{StaticResource SwAccentWashBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource SwAccentBrush}" />
+        </Style>
+        <Style Selector="Button.card:pressed /template/ Border#CardBorder">
+            <Setter Property="Background" Value="{StaticResource SwAccentPressBrush}" />
+        </Style>
+        <Style Selector="Button.card:disabled">
+            <Setter Property="Cursor" Value="Arrow" />
+            <Setter Property="Opacity" Value="0.55" />
+        </Style>
+    </Window.Styles>
+
+    <Grid Background="{StaticResource SwWindowBrush}" RowDefinitions="Auto,*">
+
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
+
+            <branding:BrandHeader Grid.Column="0"
+                                  Margin="32,28,32,16"
+                                  Caption="Select a tool to get started." />
+
+            <Button Grid.Column="1"
+                    Margin="0,0,28,0"
+                    Padding="12,6"
+                    VerticalAlignment="Center"
+                    Click="HelpButton_OnClick">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Path Data="{StaticResource IconSettings}"
+                          Stroke="Black"
+                          StrokeThickness="1.8"
+                          StrokeJoin="Round"
+                          Fill="Transparent"
+                          Width="14"
+                          Height="14"
+                          Stretch="Uniform"
+                          VerticalAlignment="Center" />
+                    <TextBlock VerticalAlignment="Center" Text="Help" />
+                </StackPanel>
+            </Button>
+        </Grid>
+
+        <UniformGrid Grid.Row="1"
+                     Rows="1"
+                     Columns="6"
+                     Margin="16,8,16,16"
+                     VerticalAlignment="Center">
+
+            <Button Classes="card"
+                    IsEnabled="False"
+                    Click="SongArchiverCard_OnClick">
+                <StackPanel HorizontalAlignment="Center">
+                    <Path Data="{StaticResource IconBackup}"
+                          Stroke="{StaticResource SwTextFaintBrush}"
+                          StrokeThickness="1.6"
+                          StrokeJoin="Round"
+                          Fill="Transparent"
+                          Width="40"
+                          Height="40"
+                          Stretch="Uniform"
+                          HorizontalAlignment="Center" />
+                    <TextBlock Margin="0,12,0,0"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Text="Song Archiver" />
+                    <TextBlock Margin="10,5,10,0"
+                               FontSize="11"
+                               Foreground="{StaticResource SwTextFaintBrush}"
+                               HorizontalAlignment="Center"
+                               MaxWidth="160"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Text="Coming soon on Mac." />
+                </StackPanel>
+            </Button>
+
+            <Button Classes="card"
+                    Click="UnArchiverCard_OnClick">
+                <StackPanel HorizontalAlignment="Center">
+                    <Path Data="{StaticResource IconUnArchiver}"
+                          Stroke="{StaticResource SwToolUnArchiverBrush}"
+                          StrokeThickness="1.8"
+                          StrokeJoin="Round"
+                          Fill="Transparent"
+                          Width="40"
+                          Height="40"
+                          Stretch="Uniform"
+                          HorizontalAlignment="Center" />
+                    <TextBlock Margin="0,12,0,0"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Text="Un-Archiver" />
+                    <TextBlock Margin="10,5,10,0"
+                               FontSize="11"
+                               Foreground="{StaticResource SwTextFaintBrush}"
+                               HorizontalAlignment="Center"
+                               MaxWidth="140"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Text="Restore an archived song and fix its internal paths." />
+                </StackPanel>
+            </Button>
+
+            <Button Classes="card"
+                    Click="SweeperCard_OnClick">
+                <StackPanel HorizontalAlignment="Center">
+                    <Path Data="{StaticResource IconSweeper}"
+                          Stroke="{StaticResource SwToolSweeperBrush}"
+                          StrokeThickness="1.8"
+                          StrokeJoin="Round"
+                          Fill="Transparent"
+                          Width="40"
+                          Height="40"
+                          Stretch="Uniform"
+                          HorizontalAlignment="Center" />
+                    <TextBlock Margin="0,12,0,0"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Text="Folder Sweeper" />
+                    <TextBlock Margin="10,5,10,0"
+                               FontSize="11"
+                               Foreground="{StaticResource SwTextFaintBrush}"
+                               HorizontalAlignment="Center"
+                               MaxWidth="160"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Text="Find and remove old or incomplete song folders." />
+                </StackPanel>
+            </Button>
+
+            <Button Classes="card"
+                    Click="BackupCard_OnClick">
+                <StackPanel HorizontalAlignment="Center">
+                    <Path Data="{StaticResource IconBackup}"
+                          Stroke="{StaticResource SwToolBackupBrush}"
+                          StrokeThickness="1.8"
+                          StrokeJoin="Round"
+                          Fill="Transparent"
+                          Width="40"
+                          Height="40"
+                          Stretch="Uniform"
+                          HorizontalAlignment="Center" />
+                    <TextBlock Margin="0,12,0,0"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Text="Song Backup" />
+                    <TextBlock Margin="10,5,10,0"
+                               FontSize="11"
+                               Foreground="{StaticResource SwTextFaintBrush}"
+                               HorizontalAlignment="Center"
+                               MaxWidth="160"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Text="Sync songs to a backup location, keeping only changed files." />
+                </StackPanel>
+            </Button>
+
+            <Button Classes="card"
+                    IsEnabled="False"
+                    Click="RenamerCard_OnClick">
+                <StackPanel HorizontalAlignment="Center">
+                    <Path Data="{StaticResource IconPathFixer}"
+                          Stroke="{StaticResource SwTextFaintBrush}"
+                          StrokeThickness="1.6"
+                          StrokeJoin="Round"
+                          Fill="Transparent"
+                          Width="40"
+                          Height="40"
+                          Stretch="Uniform"
+                          HorizontalAlignment="Center" />
+                    <TextBlock Margin="0,12,0,0"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Text="Song ReNamer" />
+                    <TextBlock Margin="10,5,10,0"
+                               FontSize="11"
+                               Foreground="{StaticResource SwTextFaintBrush}"
+                               HorizontalAlignment="Center"
+                               MaxWidth="160"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Text="Coming soon on Mac." />
+                </StackPanel>
+            </Button>
+
+            <Button Classes="card"
+                    Click="PathFixerCard_OnClick">
+                <StackPanel HorizontalAlignment="Center">
+                    <Path Data="{StaticResource IconPathFixer}"
+                          Stroke="{StaticResource SwToolPathFixerBrush}"
+                          StrokeThickness="1.8"
+                          StrokeJoin="Round"
+                          Fill="Transparent"
+                          Width="40"
+                          Height="40"
+                          Stretch="Uniform"
+                          HorizontalAlignment="Center" />
+                    <TextBlock Margin="0,12,0,0"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               HorizontalAlignment="Center"
+                               Text="Path Fixer" />
+                    <TextBlock Margin="10,5,10,0"
+                               FontSize="11"
+                               Foreground="{StaticResource SwTextFaintBrush}"
+                               HorizontalAlignment="Center"
+                               MaxWidth="160"
+                               TextAlignment="Center"
+                               TextWrapping="Wrap"
+                               Text="Fix broken media paths after a song is restored to a new location." />
+                </StackPanel>
+            </Button>
+
+        </UniformGrid>
+    </Grid>
+</Window>

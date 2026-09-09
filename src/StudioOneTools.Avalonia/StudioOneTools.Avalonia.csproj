@@ -1,0 +1,55 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+    <!--
+      These only take effect for a self-contained, RID-specific "dotnet publish"
+      (e.g. -r osx-arm64, self-contained true); they're no-ops for plain "dotnet build"
+      or "dotnet run", so no RuntimeIdentifier is hardcoded here.
+    -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StudioOneTools.StudioOne\StudioOneTools.StudioOne.csproj" />
+    <ProjectReference Include="..\StudioOneTools.Core\StudioOneTools.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Six Walls brand assets: bundled OFL fonts + logo art. -->
+    <AvaloniaResource Include="Branding\Fonts\*.ttf" />
+    <AvaloniaResource Include="Branding\Assets\*.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.1.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.1" />
+  </ItemGroup>
+
+  <!--
+    ViewModels and settings are plain INotifyPropertyChanged POCOs with no WPF types,
+    so they're linked (compiled into both assemblies) rather than duplicated here.
+    MainWindowViewModel.cs and RenamerWindowViewModel.cs are intentionally not linked;
+    their windows (Song Archiver, Song ReNamer) are out of scope for this milestone.
+  -->
+  <ItemGroup>
+    <Compile Include="..\StudioOneTools.App\ViewModels\BindableBase.cs"              Link="ViewModels\BindableBase.cs" />
+    <Compile Include="..\StudioOneTools.App\ViewModels\PathFixerWindowViewModel.cs"  Link="ViewModels\PathFixerWindowViewModel.cs" />
+    <Compile Include="..\StudioOneTools.App\ViewModels\BackupWindowViewModel.cs"     Link="ViewModels\BackupWindowViewModel.cs" />
+    <Compile Include="..\StudioOneTools.App\ViewModels\BackupFolderItemViewModel.cs" Link="ViewModels\BackupFolderItemViewModel.cs" />
+    <Compile Include="..\StudioOneTools.App\ViewModels\SweeperWindowViewModel.cs"    Link="ViewModels\SweeperWindowViewModel.cs" />
+    <Compile Include="..\StudioOneTools.App\ViewModels\SweepFolderItemViewModel.cs"  Link="ViewModels\SweepFolderItemViewModel.cs" />
+    <Compile Include="..\StudioOneTools.App\ViewModels\UnArchiverWindowViewModel.cs" Link="ViewModels\UnArchiverWindowViewModel.cs" />
+    <Compile Include="..\StudioOneTools.App\Settings\AppUserSettings.cs"             Link="Settings\AppUserSettings.cs" />
+    <Compile Include="..\StudioOneTools.App\Settings\UserSettingsService.cs"         Link="Settings\UserSettingsService.cs" />
+    <EmbeddedResource Include="..\StudioOneTools.App\Help\StudioProToolsHelp.html"   Link="Help\StudioProToolsHelp.html" />
+  </ItemGroup>
+
+</Project>

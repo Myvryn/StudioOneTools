@@ -1,0 +1,122 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:branding="clr-namespace:StudioOneTools.Avalonia.Branding"
+        x:Class="StudioOneTools.Avalonia.PathFixerWindow"
+        Title="Six Walls — Path Fixer"
+        Icon="/Branding/Assets/six_walls_mark.png"
+        Height="420"
+        Width="720"
+        MinHeight="380"
+        MinWidth="580"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="16" RowDefinitions="Auto,Auto,Auto,*,Auto">
+
+        <!-- Title -->
+        <branding:BrandHeader Grid.Row="0"
+                              Margin="0,0,0,12"
+                              Screen="Path Fixer" />
+
+        <!-- Song file row -->
+        <Grid Grid.Row="1" Margin="0,0,0,16" ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Grid.Column="0"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Text="Song file" />
+
+            <TextBox x:Name="SongFilePathTextBox"
+                     Grid.Column="1"
+                     Padding="8,6"
+                     Text="{Binding SongFilePath, Mode=TwoWay}"
+                     TextChanged="SongFilePathTextBox_OnTextChanged" />
+
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Content="Browse..."
+                    Click="BrowseButton_OnClick" />
+        </Grid>
+
+        <!-- Analysis panel -->
+        <Border Grid.Row="2"
+                Margin="0,0,0,12"
+                Padding="14"
+                BorderBrush="{StaticResource SwHairlineSoftBrush}"
+                BorderThickness="1"
+                CornerRadius="6">
+            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*">
+
+                <TextBlock Grid.Row="0" Grid.Column="0"
+                           Margin="0,0,12,6"
+                           FontWeight="SemiBold"
+                           Text="Stored path" />
+                <TextBlock Grid.Row="0" Grid.Column="1"
+                           Margin="0,0,0,6"
+                           TextWrapping="Wrap"
+                           Text="{Binding StoredPath}" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           Margin="0,0,12,6"
+                           FontWeight="SemiBold"
+                           Text="Current path" />
+                <TextBlock Grid.Row="1" Grid.Column="1"
+                           Margin="0,0,0,6"
+                           TextWrapping="Wrap"
+                           Text="{Binding CurrentPath}" />
+
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           Margin="0,0,12,0"
+                           FontWeight="SemiBold"
+                           Text="Paths to fix" />
+                <TextBlock Grid.Row="2" Grid.Column="1"
+                           Text="{Binding PathsToUpdate}" />
+            </Grid>
+        </Border>
+
+        <!-- Fix button row -->
+        <StackPanel Grid.Row="3"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+            <Button Padding="16,6"
+                    IsEnabled="{Binding CanFix}"
+                    Content="Fix Paths"
+                    Click="FixButton_OnClick" />
+            <TextBlock Margin="16,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource SwTextFaintBrush}"
+                       FontSize="11"
+                       TextWrapping="Wrap"
+                       MaxWidth="420"
+                       Text="Tip: back up your .song file before fixing, in case you need to revert." />
+        </StackPanel>
+
+        <!-- Status bar -->
+        <Border Grid.Row="4"
+                Margin="0,8,0,0"
+                Padding="10"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
+                BorderThickness="1"
+                CornerRadius="6">
+            <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
+        </Border>
+
+        <!-- Busy overlay -->
+        <Grid Grid.Row="0"
+              Grid.RowSpan="5"
+              Background="{StaticResource SwOverlayBrush}"
+              IsVisible="{Binding IsBusy}">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <ProgressBar IsIndeterminate="True"
+                             Width="300"
+                             Height="6" />
+                <TextBlock Margin="0,16,0,0"
+                           Foreground="White"
+                           FontSize="15"
+                           HorizontalAlignment="Center"
+                           Text="{Binding BusyMessage}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

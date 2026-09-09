@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:branding="clr-namespace:StudioOneTools.App.Branding"
         mc:Ignorable="d"
-        Title="Studio Pro Tools - Song Backup"
+        Title="Six Walls — Song Backup"
+        Icon="pack://application:,,,/Branding/Assets/six_walls_mark.png"
         Height="640"
         Width="1000"
         MinHeight="500"
@@ -16,7 +18,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#FF107C41" />
+            <Setter Property="Background" Value="{StaticResource SwAccentBrush}" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="FontWeight" Value="SemiBold" />
@@ -32,14 +34,14 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FF0D6B38" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SwAccentHoverBrush}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FF0A5A2F" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SwAccentDeepBrush}" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="#FFC0D8CA" />
-                                <Setter Property="Foreground" Value="#FF8AAE9E" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SwAccentDisabledBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource SwOnAccentDisabledBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -58,21 +60,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Title with green icon -->
-        <StackPanel Grid.Row="0"
-                    Orientation="Horizontal"
-                    Margin="0,0,0,14">
-            <TextBlock FontFamily="Segoe MDL2 Assets"
-                       FontSize="28"
-                       Foreground="#FF107C41"
-                       VerticalAlignment="Center"
-                       Margin="0,0,10,0"
-                       Text="&#xE74E;" />
-            <TextBlock FontSize="24"
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center"
-                       Text="Song Backup" />
-        </StackPanel>
+        <branding:BrandHeader Grid.Row="0"
+                              Margin="0,0,0,14"
+                              Screen="Song Backup" />
 
         <!-- Songs root folder row -->
         <Grid Grid.Row="1"
@@ -110,7 +100,7 @@
                   SelectionMode="Single"
                   HeadersVisibility="Column"
                   RowBackground="White"
-                  AlternatingRowBackground="#FFF0F8F2"
+                  AlternatingRowBackground="{StaticResource SwSurfaceAltBrush}"
                   ItemsSource="{Binding SongFolders}">
             <DataGrid.Columns>
 
@@ -207,8 +197,8 @@
         <Border Grid.Row="5"
                 Margin="0,8,0,0"
                 Padding="10"
-                Background="#FFF4F4F4"
-                BorderBrush="#FFD0D0D0"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
                 BorderThickness="1"
                 CornerRadius="6">
             <TextBlock Text="{Binding StatusMessage}"
@@ -218,7 +208,7 @@
         <!-- Busy overlay -->
         <Grid Grid.Row="0"
               Grid.RowSpan="6"
-              Background="#CC202020"
+              Background="{StaticResource SwOverlayBrush}"
               Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center">

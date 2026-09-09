@@ -1,0 +1,185 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:branding="clr-namespace:StudioOneTools.Avalonia.Branding"
+        x:Class="StudioOneTools.Avalonia.BackupWindow"
+        Title="Six Walls — Song Backup"
+        Icon="/Branding/Assets/six_walls_mark.png"
+        Height="640"
+        Width="1000"
+        MinHeight="500"
+        MinWidth="760"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_OnLoaded">
+
+    <Window.Styles>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="{StaticResource SwAccentBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="Border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ Border#Border">
+            <Setter Property="Background" Value="{StaticResource SwAccentHoverBrush}" />
+        </Style>
+        <Style Selector="Button.primary:pressed /template/ Border#Border">
+            <Setter Property="Background" Value="{StaticResource SwAccentDeepBrush}" />
+        </Style>
+        <Style Selector="Button.primary:disabled /template/ Border#Border">
+            <Setter Property="Background" Value="{StaticResource SwAccentDisabledBrush}" />
+        </Style>
+        <Style Selector="Button.primary:disabled">
+            <Setter Property="Foreground" Value="{StaticResource SwOnAccentDisabledBrush}" />
+        </Style>
+    </Window.Styles>
+
+    <Grid Margin="16" RowDefinitions="Auto,Auto,*,Auto,Auto,Auto">
+
+        <branding:BrandHeader Grid.Row="0"
+                              Margin="0,0,0,14"
+                              Screen="Song Backup" />
+
+        <!-- Songs root folder row -->
+        <Grid Grid.Row="1" Margin="0,0,0,12" ColumnDefinitions="110,*,Auto">
+            <TextBlock Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Text="Songs folder" />
+
+            <TextBox x:Name="RootFolderPathTextBox"
+                     Grid.Column="1"
+                     Padding="8,6"
+                     Text="{Binding RootFolderPath, Mode=TwoWay}"
+                     TextChanged="RootFolderPathTextBox_OnTextChanged" />
+
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Content="Browse..."
+                    Click="BrowseSongFolderButton_OnClick" />
+        </Grid>
+
+        <!-- Song folders DataGrid -->
+        <DataGrid x:Name="SongFoldersDataGrid"
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
+                  SelectionMode="Single"
+                  HeadersVisibility="Column"
+                  RowBackground="White"
+                  ItemsSource="{Binding SongFolders}">
+            <DataGrid.Columns>
+
+                <!-- Single-click checkbox via template column -->
+                <DataGridTemplateColumn Width="44" CanUserResize="False" CanUserSort="False">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="&#x2714;"
+                                       HorizontalAlignment="Center"
+                                       ToolTip.Tip="Include in backup" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Song Folder"
+                                    Binding="{Binding FolderName}"
+                                    Width="2*"
+                                    IsReadOnly="True" />
+
+                <DataGridTextColumn Header="Path"
+                                    Binding="{Binding FolderPath}"
+                                    Width="*"
+                                    IsReadOnly="True" />
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Backup destination row -->
+        <Grid Grid.Row="3" Margin="0,12,0,0" ColumnDefinitions="110,*,Auto">
+            <TextBlock Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Text="Backup to" />
+
+            <TextBox x:Name="BackupFolderPathTextBox"
+                     Grid.Column="1"
+                     Padding="8,6"
+                     Text="{Binding BackupFolderPath, Mode=TwoWay}" />
+
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Content="Browse..."
+                    Click="BrowseBackupFolderButton_OnClick" />
+        </Grid>
+
+        <!-- Action buttons row -->
+        <Grid Grid.Row="4" Margin="0,8,0,0" ColumnDefinitions="Auto,Auto,*,Auto">
+
+            <Button Grid.Column="0"
+                    Padding="16,6"
+                    IsEnabled="{Binding HasSongFolders}"
+                    Content="Select All"
+                    Click="SelectAllButton_OnClick" />
+
+            <Button Grid.Column="1"
+                    Margin="8,0,0,0"
+                    Padding="16,6"
+                    IsEnabled="{Binding HasSongFolders}"
+                    Content="Deselect All"
+                    Click="DeselectAllButton_OnClick" />
+
+            <Button Grid.Column="3"
+                    Padding="16,6"
+                    Classes="primary"
+                    IsEnabled="{Binding CanBackup}"
+                    Content="{Binding BackupButtonText}"
+                    Click="BackupButton_OnClick" />
+        </Grid>
+
+        <!-- Status bar -->
+        <Border Grid.Row="5"
+                Margin="0,8,0,0"
+                Padding="10"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
+                BorderThickness="1"
+                CornerRadius="6">
+            <TextBlock Text="{Binding StatusMessage}"
+                       TextWrapping="Wrap" />
+        </Border>
+
+        <!-- Busy overlay -->
+        <Grid Grid.Row="0"
+              Grid.RowSpan="6"
+              Background="{StaticResource SwOverlayBrush}"
+              IsVisible="{Binding IsBusy}">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <ProgressBar IsIndeterminate="True"
+                             Width="300"
+                             Height="6" />
+                <TextBlock Margin="0,16,0,0"
+                           Foreground="White"
+                           FontSize="15"
+                           HorizontalAlignment="Center"
+                           Text="{Binding BusyMessage}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

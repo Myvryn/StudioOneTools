@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:branding="clr-namespace:StudioOneTools.App.Branding"
         mc:Ignorable="d"
-        Title="Studio Pro Tools - Song ReNamer"
+        Title="Six Walls — Song ReNamer"
+        Icon="pack://application:,,,/Branding/Assets/six_walls_mark.png"
         Height="500"
         Width="720"
         MinHeight="400"
@@ -16,7 +18,7 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#FF7B2FBE" />
+            <Setter Property="Background" Value="{StaticResource SwAccentBrush}" />
             <Setter Property="Foreground" Value="White" />
             <Setter Property="BorderThickness" Value="0" />
             <Setter Property="FontWeight" Value="SemiBold" />
@@ -32,14 +34,14 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FF6A28A8" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SwAccentHoverBrush}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FF5A1E96" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SwAccentDeepBrush}" />
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="Background" Value="#FFCEB8E8" />
-                                <Setter Property="Foreground" Value="#FF9E80C8" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SwAccentDisabledBrush}" />
+                                <Setter Property="Foreground" Value="{StaticResource SwOnAccentDisabledBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -48,9 +50,9 @@
         </Style>
 
         <Style x:Key="SuggestionChipStyle" TargetType="Button">
-            <Setter Property="Background" Value="#FFF3EAFF" />
-            <Setter Property="Foreground" Value="#FF5A1E96" />
-            <Setter Property="BorderBrush" Value="#FFCDB0F0" />
+            <Setter Property="Background" Value="{StaticResource SwAccentWashBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource SwAccentDeepBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource SwAccentBorderBrush}" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="Padding" Value="14,5" />
             <Setter Property="Margin" Value="0,0,8,8" />
@@ -70,11 +72,11 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FFE5D4FF" />
-                                <Setter TargetName="Border" Property="BorderBrush" Value="#FF9B6FD8" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SwAccentWashHoverBrush}" />
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource SwAccentBrush}" />
                             </Trigger>
                             <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Border" Property="Background" Value="#FFD4BAFF" />
+                                <Setter TargetName="Border" Property="Background" Value="{StaticResource SwAccentPressBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -91,21 +93,9 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Title -->
-        <StackPanel Grid.Row="0"
-                    Orientation="Horizontal"
-                    Margin="0,0,0,14">
-            <TextBlock FontFamily="Segoe MDL2 Assets"
-                       FontSize="28"
-                       Foreground="#FF7B2FBE"
-                       VerticalAlignment="Center"
-                       Margin="0,0,10,0"
-                       Text="&#xE8AC;" />
-            <TextBlock FontSize="24"
-                       FontWeight="SemiBold"
-                       VerticalAlignment="Center"
-                       Text="Song ReNamer" />
-        </StackPanel>
+        <branding:BrandHeader Grid.Row="0"
+                              Margin="0,0,0,14"
+                              Screen="Song ReNamer" />
 
         <!-- Folder row -->
         <Grid Grid.Row="1"
@@ -137,7 +127,7 @@
         <Grid Grid.Row="2">
 
             <!-- Placeholder shown when no analysis is loaded -->
-            <TextBlock Foreground="#FFAAAAAA"
+            <TextBlock Foreground="{StaticResource SwTextFaintBrush}"
                        FontSize="13"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
@@ -150,8 +140,8 @@
                 <StackPanel>
 
                     <!-- Current name band -->
-                    <Border Background="#FFF7F2FF"
-                            BorderBrush="#FFD0B8F0"
+                    <Border Background="{StaticResource SwAccentWashBrush}"
+                            BorderBrush="{StaticResource SwAccentBorderBrush}"
                             BorderThickness="1"
                             CornerRadius="6"
                             Padding="14,10"
@@ -165,7 +155,7 @@
 
                             <TextBlock Grid.Column="0"
                                        Text="Current name"
-                                       Foreground="#FF666666"
+                                       Foreground="{StaticResource SwTextDimBrush}"
                                        VerticalAlignment="Center"
                                        Margin="0,0,14,0" />
 
@@ -195,7 +185,7 @@
                                 Margin="0,0,0,16">
                         <TextBlock Text="Suggested names from .song files:"
                                    FontSize="12"
-                                   Foreground="#FF555555"
+                                   Foreground="{StaticResource SwTextDimBrush}"
                                    Margin="0,0,0,8" />
                         <ItemsControl ItemsSource="{Binding Suggestions}">
                             <ItemsControl.ItemsPanel>
@@ -252,8 +242,8 @@
         <Border Grid.Row="3"
                 Margin="0,10,0,0"
                 Padding="10"
-                Background="#FFF4F4F4"
-                BorderBrush="#FFD0D0D0"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
                 BorderThickness="1"
                 CornerRadius="6">
             <TextBlock Text="{Binding StatusMessage}"
@@ -263,7 +253,7 @@
         <!-- Busy overlay -->
         <Grid Grid.Row="0"
               Grid.RowSpan="4"
-              Background="#CC202020"
+              Background="{StaticResource SwOverlayBrush}"
               Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibility}}">
             <StackPanel HorizontalAlignment="Center"
                         VerticalAlignment="Center">

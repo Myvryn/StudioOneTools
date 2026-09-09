@@ -29,10 +29,10 @@ internal sealed class TestSongProject : IDisposable
 
     #region Public Methods
 
-    public static TestSongProject Create()
+    public static TestSongProject Create(string projectFolderName = "Project")
     {
         var workingRootPath  = Path.Combine(Path.GetTempPath(), "StudioOneToolsTests", Guid.NewGuid().ToString("N"));
-        var projectFolderPath = Path.Combine(workingRootPath, "Project");
+        var projectFolderPath = Path.Combine(workingRootPath, projectFolderName);
 
         Directory.CreateDirectory(projectFolderPath);
 
@@ -54,14 +54,18 @@ internal sealed class TestSongProject : IDisposable
         File.WriteAllText(fullPath, content, Encoding.UTF8);
     }
 
-    public void WriteSongArchive(IReadOnlyCollection<string> usedAudioClipIds, IReadOnlyCollection<MediaPoolEntry> mediaPoolEntries)
+    public void WriteSongArchive(
+        IReadOnlyCollection<string> usedAudioClipIds,
+        IReadOnlyCollection<MediaPoolEntry> mediaPoolEntries,
+        string? documentPathUrl = null,
+        string? storedFolderPath = null)
     {
         var songFilePath = Path.Combine(ProjectFolderPath, $"{new DirectoryInfo(ProjectFolderPath).Name}.song");
 
         using var archive = ZipFile.Open(songFilePath, ZipArchiveMode.Create);
 
         WriteArchiveEntry(archive, "Song/song.xml", CreateSongXml(usedAudioClipIds));
-        WriteArchiveEntry(archive, "Song/mediapool.xml", CreateMediaPoolXml(mediaPoolEntries, ProjectFolderPath));
+        WriteArchiveEntry(archive, "Song/mediapool.xml", CreateMediaPoolXml(mediaPoolEntries, storedFolderPath ?? ProjectFolderPath, documentPathUrl));
     }
 
     public string GetArchiveFilePath(string fileName)
@@ -112,7 +116,7 @@ internal sealed class TestSongProject : IDisposable
         return builder.ToString();
     }
 
-    private static string CreateMediaPoolXml(IReadOnlyCollection<MediaPoolEntry> mediaPoolEntries, string projectFolderPath)
+    private static string CreateMediaPoolXml(IReadOnlyCollection<MediaPoolEntry> mediaPoolEntries, string projectFolderPath, string? documentPathUrl)
     {
         var builder = new StringBuilder();
 
@@ -133,6 +137,12 @@ internal sealed class TestSongProject : IDisposable
 
         builder.AppendLine("""    </MediaFolder>""");
         builder.AppendLine("""  </Attributes>""");
+
+        if (documentPathUrl is not null)
+        {
+            builder.AppendLine($"""  <Attributes x:id="documentPath" type="1" url="{documentPathUrl}"/>""");
+        }
+
         builder.AppendLine("""</MediaPool>""");
 
         return builder.ToString();

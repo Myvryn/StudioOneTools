@@ -1,0 +1,48 @@
+<UserControl x:Class="StudioOneTools.App.Branding.BrandHeader"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Name="Root">
+
+    <StackPanel>
+        <!-- Wordmark row: Six Walls mark + "SIX WALLS" + product line -->
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Image Source="pack://application:,,,/Branding/Assets/six_walls_mark.png"
+                   Width="42" Height="42"
+                   VerticalAlignment="Center"
+                   RenderOptions.BitmapScalingMode="HighQuality" />
+
+            <TextBlock Margin="16,0,0,0"
+                       VerticalAlignment="Center"
+                       FontFamily="{StaticResource SwFontDisplay}"
+                       FontSize="24">
+                <Run Text="SIX " Foreground="{StaticResource SwTextBrush}" />
+                <Run Text="WALLS" Foreground="{StaticResource SwOrangeBrush}" />
+            </TextBlock>
+
+            <TextBlock Margin="19,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource SwTextDimBrush}"
+                       FontFamily="{StaticResource SwFontHeading}"
+                       FontSize="21"
+                       Text="{Binding Product, ElementName=Root}" />
+        </StackPanel>
+
+        <!-- Optional per-screen title -->
+        <TextBlock Margin="0,16,0,0"
+                   FontSize="38"
+                   FontWeight="SemiBold"
+                   Foreground="{StaticResource SwTextBrush}"
+                   Text="{Binding Screen, ElementName=Root}"
+                   Visibility="{Binding ScreenVisibility, ElementName=Root}" />
+
+        <!-- Optional supporting line -->
+        <TextBlock Margin="0,10,0,0"
+                   FontSize="21"
+                   Foreground="{StaticResource SwTextDimBrush}"
+                   Text="{Binding Caption, ElementName=Root}"
+                   Visibility="{Binding CaptionVisibility, ElementName=Root}" />
+    </StackPanel>
+</UserControl>
