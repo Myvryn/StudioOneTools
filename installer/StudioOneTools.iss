@@ -39,6 +39,7 @@
   #error Flavor must be Web or Offline
 #endif
 
+#define MyAppGuid       "81B07EBF-0A6F-4F60-B5A7-9C7066D64BFC"
 #define MyAppName       "Tools for Studio One"
 #define MyPublisher     "Six Walls"
 #define MyExeName       "StudioOneTools.App.exe"
@@ -51,7 +52,7 @@
 #define DotNetBootstrapUrl "https://aka.ms/dotnet/" + DotNetChannel + "/windowsdesktop-runtime-win-x64.exe"
 
 [Setup]
-AppId={{81B07EBF-0A6F-4F60-B5A7-9C7066D64BFC}
+AppId={{{#MyAppGuid}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppVerName={#MyAppName} {#MyAppVersion}

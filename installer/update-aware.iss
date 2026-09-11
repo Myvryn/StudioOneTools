@@ -2,13 +2,26 @@
 ; install of the same AppId is already on the machine -- even if the payload is
 ; byte-identical -- and gives the user the choice to uninstall instead of
 ; update/reinstall. #include this at the end of a script that has defined
-; MyAppName / MyAppVersion and set  DisableReadyPage=no .
+; MyAppName / MyAppVersion / MyAppGuid (the AppId GUID, WITHOUT braces -- see
+; below) and set  DisableReadyPage=no .
 ;
 ; Fresh install    : no extra page -> double-click, UAC, done.
 ; Existing install : a page asks "Update / reinstall" or "Uninstall" before
 ;                     the Ready page. Choosing Uninstall runs the existing
 ;                     uninstaller and exits Setup -- it never falls through
 ;                     into installing a fresh copy right after.
+;
+; MyAppGuid: found the hard way -- SetupSetting("AppId") returns the AppId
+; directive's ini text exactly as written, e.g. "{{81B07EBF-...}". The doubled
+; leading brace is Inno's OWN escape (a bare "{" would start a {param}
+; reference) which Inno's compiler undoes when it builds its OWN uninstall
+; key, but nothing undoes it for a plain Pascal string built from that text --
+; so a naive 'Uninstall\' + SetupSetting("AppId") + '_is1' never matches the
+; real key. Every prior install then looked like a fresh install: no
+; Update/Uninstall page, Ready page skipped, no "already installed" detection
+; at all. Sidestepped entirely by having the including script #define
+; MyAppGuid to the bare GUID once, and building AppId= and this key from that
+; same constant so they can't drift apart.
 
 [Code]
 var
@@ -51,7 +64,7 @@ end;
 
 function UninstKey(): String;
 begin
-  Result := 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{#SetupSetting("AppId")}_is1';
+  Result := 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{{#MyAppGuid}}_is1';
 end;
 
 procedure DetectPrior();
