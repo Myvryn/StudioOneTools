@@ -285,7 +285,7 @@ public partial class SweeperWindow : Window
 
         try
         {
-            Process.Start(new ProcessStartInfo
+            using var process = Process.Start(new ProcessStartInfo
             {
                 FileName = "explorer.exe",
                 Arguments = folderPath,

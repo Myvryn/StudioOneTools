@@ -285,7 +285,7 @@ public partial class MainWindow : Window
                     var archiveDirectory = Path.GetDirectoryName(archiveResult.ArchiveFilePath);
                     if (!string.IsNullOrWhiteSpace(archiveDirectory) && Directory.Exists(archiveDirectory))
                     {
-                        System.Diagnostics.Process.Start("explorer.exe", archiveDirectory);
+                        using var process = System.Diagnostics.Process.Start("explorer.exe", archiveDirectory);
                     }
                 }
             }

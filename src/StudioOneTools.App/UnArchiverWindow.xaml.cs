@@ -120,7 +120,7 @@ public partial class UnArchiverWindow : Window
 
             if (open == MessageBoxResult.Yes)
             {
-                Process.Start(new ProcessStartInfo
+                using var process = Process.Start(new ProcessStartInfo
                 {
                     FileName        = "explorer.exe",
                     Arguments       = result.SongFolderPath,

@@ -8,7 +8,7 @@ public static class FileRevealService
     {
         if (OperatingSystem.IsWindows())
         {
-            Process.Start(new ProcessStartInfo
+            using var process = Process.Start(new ProcessStartInfo
             {
                 FileName        = "explorer.exe",
                 Arguments       = $"\"{path}\"",
@@ -17,7 +17,7 @@ public static class FileRevealService
         }
         else if (OperatingSystem.IsMacOS())
         {
-            Process.Start(new ProcessStartInfo
+            using var process = Process.Start(new ProcessStartInfo
             {
                 FileName        = "open",
                 Arguments       = $"\"{path}\"",
@@ -27,7 +27,7 @@ public static class FileRevealService
         else
         {
             // Linux, best-effort.
-            Process.Start(new ProcessStartInfo
+            using var process = Process.Start(new ProcessStartInfo
             {
                 FileName        = "xdg-open",
                 Arguments       = $"\"{path}\"",

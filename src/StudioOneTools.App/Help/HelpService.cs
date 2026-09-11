@@ -28,7 +28,7 @@ public static class HelpService
             var tempPath = Path.Combine(Path.GetTempPath(), "StudioProToolsHelp.html");
             File.WriteAllText(tempPath, html, Encoding.UTF8);
 
-            Process.Start(new ProcessStartInfo
+            using var process = Process.Start(new ProcessStartInfo
             {
                 FileName        = tempPath,
                 UseShellExecute = true,
