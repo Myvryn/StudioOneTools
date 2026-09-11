@@ -120,7 +120,7 @@ begin
   else
     Desc := '{#MyAppName} is already installed on this computer.';
 
-  gUninstallChoicePage := CreateInputOptionPage(wpWelcome,
+  gUninstallChoicePage := CreateInputOptionPage(wpSelectDir,
     '{#MyAppName} is already installed', 'What would you like to do?', Desc,
     True, False);
   gUninstallChoicePage.Add('&Update / reinstall to version {#MyAppVersion}');
@@ -131,12 +131,41 @@ end;
 function NextButtonClick(CurPageID: Integer): Boolean;
 var
   ResultCode: Integer;
+  UninstPath: String;
+  Started:    Boolean;
 begin
   Result := True;
   if (gUninstallChoicePage <> nil) and (CurPageID = gUninstallChoicePage.ID)
      and (gUninstallChoicePage.SelectedValueIndex = 1) then
   begin
-    Exec(ExpandConstant('{uninstallexe}'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+    // the uninstallexe constant is empty at this point in the wizard, even
+    // though app itself is already correctly resolved (verified with a
+    // self-driving no-admin test build -- it invokes NextButtonClick
+    // directly, sidestepping the OS-level focus-stealing that makes
+    // external keystroke automation unreliable for this kind of test).
+    // Built manually instead -- Inno's uninstaller for a single-language
+    // setup like ours is always named unins000.exe, directly in app.
+    UninstPath := ExpandConstant('{app}') + '\unins000.exe';
+    if not FileExists(UninstPath) then
+    begin
+      MsgBox('Could not find the existing uninstaller at:' + #13#10 + UninstPath
+        + #13#10#13#10 + 'Nothing was uninstalled. Please uninstall {#MyAppName} '
+        + 'from Windows Settings > Apps instead.', mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+
+    Started := Exec(UninstPath, '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+    if not Started then
+    begin
+      MsgBox('Could not start the uninstaller at:' + #13#10 + UninstPath
+        + #13#10#13#10 + 'Windows error code: ' + IntToStr(ResultCode) + #13#10#13#10
+        + 'Nothing was uninstalled. Please uninstall {#MyAppName} from Windows '
+        + 'Settings > Apps instead.', mbError, MB_OK);
+      Result := False;
+      Exit;
+    end;
+
     { Whether the user completed or cancelled that uninstall wizard, this
       Setup's job is done -- never fall through into installing a fresh copy.
       ExitProcess, not Abort -- see the comment on ExitProcess's declaration
