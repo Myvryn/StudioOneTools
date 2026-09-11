@@ -1,16 +1,20 @@
 ; Shared code: makes an installer present itself as an "Update" when a previous
 ; install of the same AppId is already on the machine -- even if the payload is
-; byte-identical. #include this at the end of a script that has defined
+; byte-identical -- and gives the user the choice to uninstall instead of
+; update/reinstall. #include this at the end of a script that has defined
 ; MyAppName / MyAppVersion and set  DisableReadyPage=no .
 ;
-; Fresh install : Ready page stays hidden -> double-click, UAC, done.
-; Existing install: a one-line Ready page appears, the button reads "Update",
-;                   and the Finished page says "has been updated".
+; Fresh install    : no extra page -> double-click, UAC, done.
+; Existing install : a page asks "Update / reinstall" or "Uninstall" before
+;                     the Ready page. Choosing Uninstall runs the existing
+;                     uninstaller and exits Setup -- it never falls through
+;                     into installing a fresh copy right after.
 
 [Code]
 var
-  gPriorVersion: String;
-  gIsUpgrade:    Boolean;
+  gPriorVersion:        String;
+  gIsUpgrade:           Boolean;
+  gUninstallChoicePage: TInputOptionWizardPage;
 
 function VerField(const S: String; Idx: Integer): Integer;
 var
@@ -80,6 +84,40 @@ begin
       + ' newer than this package (version {#MyAppVersion}).' + #13#10#13#10
       + 'Do you want to replace it with the older version?',
       mbConfirmation, MB_YESNO) = IDYES;
+end;
+
+procedure InitializeWizard();
+var
+  Desc: String;
+begin
+  if not gIsUpgrade then Exit;
+
+  if gPriorVersion <> '' then
+    Desc := '{#MyAppName} ' + gPriorVersion + ' is already installed on this computer.'
+  else
+    Desc := '{#MyAppName} is already installed on this computer.';
+
+  gUninstallChoicePage := CreateInputOptionPage(wpWelcome,
+    '{#MyAppName} is already installed', 'What would you like to do?', Desc,
+    True, False);
+  gUninstallChoicePage.Add('&Update / reinstall to version {#MyAppVersion}');
+  gUninstallChoicePage.Add('&Uninstall {#MyAppName}');
+  gUninstallChoicePage.SelectedValueIndex := 0;
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+var
+  ResultCode: Integer;
+begin
+  Result := True;
+  if (gUninstallChoicePage <> nil) and (CurPageID = gUninstallChoicePage.ID)
+     and (gUninstallChoicePage.SelectedValueIndex = 1) then
+  begin
+    Exec(ExpandConstant('{uninstallexe}'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
+    { Whether the user completed or cancelled that uninstall wizard, this
+      Setup's job is done -- never fall through into installing a fresh copy. }
+    Abort;
+  end;
 end;
 
 function ShouldSkipPage(PageID: Integer): Boolean;

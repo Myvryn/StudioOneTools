@@ -100,13 +100,21 @@ Root: HKLM; Subkey: "Software\{#MyPublisher}\{#MyAppName}"; ValueType: string; \
 
 [Run]
 #if Flavor == "Offline"
-Filename: "{tmp}\windowsdesktop-runtime-win-x64.exe"; Parameters: "/install /quiet /norestart"; \
+; /passive (not /quiet) so the runtime installer shows its own progress bar --
+; with /quiet there is nothing on screen for the ~15-20s this step takes, and
+; that reads as a hang.
+Filename: "{tmp}\windowsdesktop-runtime-win-x64.exe"; Parameters: "/install /passive /norestart"; \
     StatusMsg: "Installing the .NET Desktop Runtime (one-time)..."; \
-    Check: NeedsDotNetDesktopRuntime; Flags: waituntilterminated
+    Check: NeedsDotNetDesktopRuntimeOffline; Flags: waituntilterminated
 #else
+; $ProgressPreference = 'SilentlyContinue' matters, not just style: PowerShell's
+; default Invoke-WebRequest progress-bar rendering is a well-known perf bug that
+; can make a download 10-100x slower, which is exactly what read as a lock-up
+; here. /passive (not /quiet) on the runtime install itself for the same reason
+; as the Offline branch above -- something visibly happening beats silence.
 Filename: "{sys}\WindowsPowerShell\v1.0\powershell.exe"; \
-    Parameters: "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command ""$ErrorActionPreference = 'Stop'; $u = '{#DotNetBootstrapUrl}'; $p = Join-Path $env:TEMP 'sixwalls-dotnet-desktop-runtime.exe'; Invoke-WebRequest -Uri $u -OutFile $p -UseBasicParsing; Start-Process -FilePath $p -ArgumentList '/install','/quiet','/norestart' -Wait"""; \
-    StatusMsg: "Getting the .NET Desktop Runtime (one-time, ~55 MB)..."; \
+    Parameters: "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -Command ""$ProgressPreference = 'SilentlyContinue'; $ErrorActionPreference = 'Stop'; $u = '{#DotNetBootstrapUrl}'; $p = Join-Path $env:TEMP 'sixwalls-dotnet-desktop-runtime.exe'; Invoke-WebRequest -Uri $u -OutFile $p -UseBasicParsing; Start-Process -FilePath $p -ArgumentList '/install','/passive','/norestart' -Wait"""; \
+    StatusMsg: "Getting the .NET Desktop Runtime (one-time, ~55 MB -- this can take a minute)..."; \
     Check: NeedsDotNetDesktopRuntime; Flags: waituntilterminated
 #endif
 Filename: "{app}\{#MyExeName}"; Description: "Launch {#MyAppName}"; Flags: postinstall skipifsilent nowait
@@ -142,3 +150,17 @@ begin
     end;
   end;
 end;
+
+#if Flavor == "Offline"
+{ Same check, but also extracts the bundled runtime installer out of the
+  setup .exe first -- "dontcopy" files are never extracted automatically,
+  only on demand via ExtractTemporaryFile, so this has to happen before the
+  Run entry above tries to launch it. Only called once, right before that
+  entry's Check decides whether to run it. }
+function NeedsDotNetDesktopRuntimeOffline(): Boolean;
+begin
+  Result := NeedsDotNetDesktopRuntime();
+  if Result then
+    ExtractTemporaryFile('windowsdesktop-runtime-win-x64.exe');
+end;
+#endif
