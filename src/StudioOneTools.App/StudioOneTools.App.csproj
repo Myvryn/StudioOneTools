@@ -37,10 +37,19 @@
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>true</SelfContained>
+    <!-- Framework-dependent: needs the .NET 10 Desktop Runtime on the target
+         machine instead of bundling one (192 MB -> ~15-30 MB). WPF cannot be
+         trimmed, so this is the only size lever available here. The runtime
+         presence check + silent bootstrap lives in the Inno installer
+         (installer/StudioOneTools.iss); this exe must never ship to a user
+         without going through that installer, or a missing runtime is a
+         silent failure to launch. -->
+    <SelfContained>false</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!-- Roll forward within the 10.x line so any installed 10.x patch/minor
+         satisfies us, matching the installer's "any 10.x" registry check. -->
+    <RollForward>LatestMinor</RollForward>
     <PublishReadyToRun>true</PublishReadyToRun>
-    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
   </PropertyGroup>
 
 </Project>
