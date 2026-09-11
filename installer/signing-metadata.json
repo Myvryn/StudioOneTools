@@ -1,0 +1,5 @@
+{
+  "Endpoint": "https://wus2.codesigning.azure.net/",
+  "CodeSigningAccountName": "sixwalls-signing",
+  "CertificateProfileName": "sixwalls-public-trust"
+}
