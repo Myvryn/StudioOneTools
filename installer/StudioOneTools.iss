@@ -16,7 +16,7 @@
 ;            needed, ~55-60 MB larger.
 ;
 ; Build with:  build-installer.ps1
-;   or direct: ISCC.exe /DMyAppVersion=1.3.0 /DFlavor=Offline StudioOneTools.iss
+;   or direct: ISCC.exe /DMyAppVersion=1.3.2 /DFlavor=Offline StudioOneTools.iss
 ; Requires Inno Setup 6+: https://jrsoftware.org/isdl.php
 ;
 ; Expects the framework-dependent publish at:
@@ -30,7 +30,7 @@
 ; prompt -> (first run only) a short runtime-fetch step -> done.
 
 #ifndef MyAppVersion
-  #define MyAppVersion "1.3.0"
+  #define MyAppVersion "1.3.2"
 #endif
 #ifndef Flavor
   #define Flavor "Web"

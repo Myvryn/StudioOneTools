@@ -9,6 +9,20 @@ git history.
 
 ---
 
+## 1.3.2 — 2026-09-11
+
+No functional app changes. Packaging only:
+
+- Switched to a framework-dependent publish (needs the .NET 10 Desktop
+  Runtime, fetched or bundled by the installer) — much smaller download than
+  the old self-contained exe.
+- Replaced the raw exe download with a real signed Inno Setup installer:
+  Start Menu + optional desktop shortcut, proper Add/Remove Programs entry,
+  and Web / Offline flavours depending on whether the target machine has
+  internet during install.
+- Installer now detects a prior install and offers Update/Reinstall or
+  Uninstall, instead of always assuming an update.
+
 ## 1.3.1 — 2026-05-31
 
 - **Path Fixer:** fixed XML corruption in `SongPathFixer` when folder names
