@@ -24,6 +24,16 @@
 ; same constant so they can't drift apart.
 
 [Code]
+{ Abort (the documented "abort Setup" procedure) does NOT close the wizard
+  when called from a page event like NextButtonClick -- verified with an
+  instrumented no-admin test build: the log showed the uninstall branch ran
+  to completion, Exec succeeded, "about to Abort" fired, and the window was
+  STILL sitting on the same page afterward, Next/Cancel still live. Abort
+  only cancels that one event; it does not terminate the process. A direct
+  kernel32 call does, verified the same way. }
+procedure ExitProcess(uExitCode: UINT);
+  external 'ExitProcess@kernel32.dll stdcall';
+
 var
   gPriorVersion:        String;
   gIsUpgrade:           Boolean;
@@ -128,8 +138,10 @@ begin
   begin
     Exec(ExpandConstant('{uninstallexe}'), '', '', SW_SHOW, ewWaitUntilTerminated, ResultCode);
     { Whether the user completed or cancelled that uninstall wizard, this
-      Setup's job is done -- never fall through into installing a fresh copy. }
-    Abort;
+      Setup's job is done -- never fall through into installing a fresh copy.
+      ExitProcess, not Abort -- see the comment on ExitProcess's declaration
+      above for why. }
+    ExitProcess(0);
   end;
 end;
 
