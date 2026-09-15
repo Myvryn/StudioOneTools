@@ -160,7 +160,19 @@ jobs:
           # and some Avalonia-native dylibs ship pre-signed with something
           # that has no Developer ID and no secure timestamp -- notarization
           # then rejects that outright. Signing directly always overwrites it.
-          "$SIGN" bundle "$APP"/Contents/MacOS/*.dylib
+          #
+          # Unlike the Installer's NativeAOT publish, this is a normal
+          # self-contained PublishSingleFile build: native libs are embedded
+          # in the single executable and self-extracted at runtime, not
+          # shipped as loose .dylib files -- so there may be none to sign
+          # here. nullglob avoids passing the Avalonia bundle the literal
+          # unmatched glob if so.
+          shopt -s nullglob
+          dylibs=("$APP"/Contents/MacOS/*.dylib)
+          shopt -u nullglob
+          if [ ${#dylibs[@]} -gt 0 ]; then
+            "$SIGN" bundle "${dylibs[@]}"
+          fi
           "$SIGN" bundle "$APP"
 
           ROOT="$RUNNER_TEMP/pkgroot"
