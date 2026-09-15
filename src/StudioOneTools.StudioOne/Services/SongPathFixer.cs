@@ -102,7 +102,10 @@ public sealed class SongPathFixer : ISongPathFixer
             throw new InvalidDataException($"The stored song path is not a valid file URL: {storedUrl}");
         }
 
-        var localPath = uri.LocalPath.Replace('/', Path.DirectorySeparatorChar);
+        // uri.LocalPath for a foreign-OS drive-letter URL (a song moved from a Windows machine,
+        // being fixed on a Mac, or vice versa) comes back in that OS's own separator style, not
+        // necessarily '/' -- normalize both directions before switching to whatever this host uses.
+        var localPath = uri.LocalPath.Replace('\\', '/').Replace('/', Path.DirectorySeparatorChar);
         return Path.GetDirectoryName(localPath) ?? localPath;
     }
 
@@ -110,9 +113,15 @@ public sealed class SongPathFixer : ISongPathFixer
     // Studio One does not percent-encode spaces, so we replicate that behaviour.
     private static string ToUrlPrefix(string folderPath)
     {
-        var normalized = Path.GetFullPath(folderPath)
-            .TrimEnd(Path.DirectorySeparatorChar)
-            .Replace(Path.DirectorySeparatorChar, '/');
+        // The stored path may be a foreign-OS absolute path (a drive letter read back on a Mac,
+        // or vice versa) that this host's Path.GetFullPath wouldn't recognize as already
+        // absolute -- e.g. "D:/OldLocation/Project" has no leading '/', so on macOS GetFullPath
+        // would treat it as relative and silently prepend the current working directory. Only
+        // resolve through GetFullPath when the path isn't already absolute in either convention.
+        var isAlreadyAbsolute = folderPath.StartsWith('/') || Regex.IsMatch(folderPath, @"^[A-Za-z]:[\\/]");
+        var normalized = (isAlreadyAbsolute ? folderPath : Path.GetFullPath(folderPath))
+            .Replace('\\', '/')
+            .TrimEnd('/');
 
         return "file:///" + normalized + "/";
     }
