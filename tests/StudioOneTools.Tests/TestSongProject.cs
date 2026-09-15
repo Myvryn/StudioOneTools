@@ -46,7 +46,7 @@ internal sealed class TestSongProject : IDisposable
 
     public void WriteProjectFile(string relativePath, string content)
     {
-        var fullPath = Path.Combine(ProjectFolderPath, relativePath);
+        var fullPath = Path.Combine(ProjectFolderPath, ToHostRelativePath(relativePath));
         var directoryPath = Path.GetDirectoryName(fullPath)
             ?? throw new InvalidOperationException("A directory path was expected.");
 
@@ -84,6 +84,23 @@ internal sealed class TestSongProject : IDisposable
     #endregion
 
     #region Private Methods
+
+    // Test fixtures write relative paths with a literal '\' (matching the production
+    // code's own internal canonical relative-path format -- see SongFolderArchiver/
+    // StudioOneSongAnalyzer's NormalizeRelativePath). That's just string manipulation
+    // there, but here it has to become a real path the OS's File/Directory APIs can
+    // resolve, which only means the same thing as '\' on Windows -- on macOS/Linux it's
+    // an ordinary filename character, so Path.Combine never sees a subfolder at all.
+    // '/' is accepted by .NET's Path APIs as a separator on every OS, Windows included.
+    private static string ToHostRelativePath(string relativePath) => relativePath.Replace('\\', '/');
+
+    // Builds a file:// URL the same way SongPathFixer's own ToUrlPrefix does (plain string
+    // concatenation, not System.Uri), because these fixtures deliberately simulate paths from
+    // an arbitrary OS (a Windows drive-letter path, say, "D:/OldLocation/Project") that may not
+    // be the one actually running the test -- new Uri(path)'s LocalPath/AbsoluteUri handling of
+    // a drive letter is not the same on every OS, only string manipulation is. Matches real
+    // Studio One output too: literal unencoded spaces, no percent-escaping.
+    internal static string ToFileUrl(string absolutePath) => "file:///" + absolutePath.Replace('\\', '/').TrimStart('/');
 
     private static void WriteArchiveEntry(ZipArchive archive, string entryPath, string content)
     {
@@ -127,8 +144,8 @@ internal sealed class TestSongProject : IDisposable
 
         foreach (var mediaPoolEntry in mediaPoolEntries)
         {
-            var absolutePath = Path.Combine(projectFolderPath, mediaPoolEntry.RelativePath);
-            var mediaFileUrl = new Uri(absolutePath).AbsoluteUri;
+            var absolutePath = projectFolderPath.Replace('\\', '/').TrimEnd('/') + "/" + ToHostRelativePath(mediaPoolEntry.RelativePath);
+            var mediaFileUrl = ToFileUrl(absolutePath);
 
             builder.AppendLine($"""      <AudioClip mediaID="{mediaPoolEntry.MediaId}" useCount="{mediaPoolEntry.UseCount}">""");
             builder.AppendLine($"""        <Url x:id="path" type="1" url="{mediaFileUrl}" />""");

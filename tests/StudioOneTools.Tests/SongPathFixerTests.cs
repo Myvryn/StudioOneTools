@@ -28,7 +28,7 @@ public sealed class SongPathFixerTests
             [
                 TestSongProject.MediaPoolEntry.Create("{USED-CLIP}", @"Media\Guitar.wav", 1),
             ],
-            documentPathUrl: new Uri(Path.Combine(oldFolderPath, "Project.song")).AbsoluteUri,
+            documentPathUrl: TestSongProject.ToFileUrl(oldFolderPath + @"\Project.song"),
             storedFolderPath: oldFolderPath);
 
         var songFilePath = Path.Combine(project.ProjectFolderPath, $"{new DirectoryInfo(project.ProjectFolderPath).Name}.song");
