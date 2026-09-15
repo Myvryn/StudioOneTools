@@ -1,0 +1,113 @@
+name: macOS staple
+
+# Phase 2 of the mac release (see macos-build.yml's header comment). Takes
+# the signed-but-not-yet-stapled .pkg from a "macOS build" run, staples the
+# notarization ticket, and produces the real release artifact + catalog
+# fragment. Deliberately does NOT wait on Apple itself -- check status first
+# with shared/_apple-signing/notary_status.py (free, no macOS runner) and
+# only run this once it says Accepted. If it isn't yet, this job fails fast
+# in seconds rather than sitting and burning billed runner time.
+#
+# Usage:
+#   python ../../shared/_apple-signing/notary_status.py <submission-id>
+#   gh workflow run "macOS staple" -R Myvryn/StudioOneTools -f build_run_id=<run id from macos-build.yml>
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: 'run id of the "macOS build" run that submitted the .pkg'
+        required: true
+
+concurrency:
+  group: macos-staple-${{ inputs.build_run_id }}
+  cancel-in-progress: true
+
+jobs:
+  staple:
+    runs-on: macos-14
+    timeout-minutes: 10
+    # download-artifact@v4's cross-run `run-id` fetch needs this explicitly --
+    # the default GITHUB_TOKEN doesn't carry it.
+    permissions:
+      actions: read
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download the unstapled .pkg
+        uses: actions/download-artifact@v4
+        with:
+          name: Tools-for-Studio-One-macOS-unstapled
+          run-id: ${{ inputs.build_run_id }}
+          github-token: ${{ github.token }}
+
+      - name: Import Developer ID certificates
+        env:
+          APPLE_CERT_APP_P12: ${{ secrets.APPLE_CERT_APP_P12 }}
+          APPLE_CERT_APP_PASSWORD: ${{ secrets.APPLE_CERT_APP_PASSWORD }}
+          APPLE_CERT_INSTALLER_P12: ${{ secrets.APPLE_CERT_INSTALLER_P12 }}
+          APPLE_CERT_INSTALLER_PASSWORD: ${{ secrets.APPLE_CERT_INSTALLER_PASSWORD }}
+          APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+        run: .github/scripts/mac-sign.sh setup
+
+      - name: Confirm status is Accepted, then staple
+        id: pkg
+        run: |
+          set -euo pipefail
+          SIGN="$PWD/.github/scripts/mac-sign.sh"
+          PKG=$(ls Tools-for-Studio-One-*-macOS.pkg)
+          ID=$(cat notarization-id.txt)
+          echo "pkg=$PKG"; echo "submission id=$ID"
+
+          # One check, no retry loop -- if it isn't Accepted yet this fails
+          # in seconds. Re-run this workflow once notary_status.py says so.
+          STATUS=$(xcrun notarytool info "$ID" \
+            --key "$SIGN_API_KEY" --key-id "$SIGN_API_KEY_ID" --issuer "$SIGN_API_ISSUER" \
+            | awk '/^  status:/ {print $2; exit}')
+          echo "status: $STATUS"
+          if [ "$STATUS" != "Accepted" ]; then
+            echo "Not Accepted yet ($STATUS) -- check again later with notary_status.py, don't re-run this blindly."
+            exit 1
+          fi
+
+          "$SIGN" staple "$PKG"
+          "$SIGN" verify "$PKG"
+
+          echo "pkg=$PKG" >> "$GITHUB_OUTPUT"
+
+      - name: Catalog fragment
+        run: |
+          set -euo pipefail
+          PKG="${{ steps.pkg.outputs.pkg }}"
+          VER=$(echo "$PKG" | sed -E 's/Tools-for-Studio-One-([0-9.]+)-macOS\.pkg/\1/')
+          BYTES=$(stat -f%z "$PKG")
+          SHA=$(shasum -a 256 "$PKG" | awk '{print $1}')
+
+          jq -n \
+            --arg product "studio-one-tools" \
+            --arg version "$VER" \
+            --arg date "$(date -u +%Y-%m-%d)" \
+            --arg file "Downloads/$PKG" \
+            --argjson bytes "$BYTES" \
+            --arg sha "$SHA" \
+            '{schemaVersion: 1, product: $product, component: "app", version: $version,
+              date: $date, soundChange: "none",
+              artifacts: [{os: "mac", variant: "app", file: $file,
+                           bytes: $bytes, sha256: $sha, signed: true}]}' \
+            > "studio-one-tools-app-$VER.json"
+
+          cat "studio-one-tools-app-$VER.json"
+          echo "--- sha256 (final, stapled) ---"
+          shasum -a 256 "$PKG"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Tools-for-Studio-One-macOS
+          path: |
+            Tools-for-Studio-One-*-macOS.pkg
+            studio-one-tools-app-*.json
+          if-no-files-found: error

@@ -3,6 +3,8 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
+    <Version>1.4.0</Version>
+    <FileVersion>1.4.0.0</FileVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
@@ -36,8 +38,6 @@
   <!--
     ViewModels and settings are plain INotifyPropertyChanged POCOs with no WPF types,
     so they're linked (compiled into both assemblies) rather than duplicated here.
-    MainWindowViewModel.cs and RenamerWindowViewModel.cs are intentionally not linked;
-    their windows (Song Archiver, Song ReNamer) are out of scope for this milestone.
   -->
   <ItemGroup>
     <Compile Include="..\StudioOneTools.App\ViewModels\BindableBase.cs"              Link="ViewModels\BindableBase.cs" />
@@ -47,6 +47,8 @@
     <Compile Include="..\StudioOneTools.App\ViewModels\SweeperWindowViewModel.cs"    Link="ViewModels\SweeperWindowViewModel.cs" />
     <Compile Include="..\StudioOneTools.App\ViewModels\SweepFolderItemViewModel.cs"  Link="ViewModels\SweepFolderItemViewModel.cs" />
     <Compile Include="..\StudioOneTools.App\ViewModels\UnArchiverWindowViewModel.cs" Link="ViewModels\UnArchiverWindowViewModel.cs" />
+    <Compile Include="..\StudioOneTools.App\ViewModels\RenamerWindowViewModel.cs"    Link="ViewModels\RenamerWindowViewModel.cs" />
+    <Compile Include="..\StudioOneTools.App\ViewModels\MainWindowViewModel.cs"       Link="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="..\StudioOneTools.App\Settings\AppUserSettings.cs"             Link="Settings\AppUserSettings.cs" />
     <Compile Include="..\StudioOneTools.App\Settings\UserSettingsService.cs"         Link="Settings\UserSettingsService.cs" />
     <EmbeddedResource Include="..\StudioOneTools.App\Help\StudioProToolsHelp.html"   Link="Help\StudioProToolsHelp.html" />

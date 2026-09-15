@@ -44,10 +44,7 @@
                 Padding="24,20">
             <StackPanel Orientation="Horizontal">
                 <Path Data="{StaticResource IconBackup}"
-                      Stroke="White"
-                      StrokeThickness="1.8"
-                      StrokeJoin="Round"
-                      Fill="Transparent"
+                      Fill="White"
                       Width="32"
                       Height="32"
                       Stretch="Uniform"

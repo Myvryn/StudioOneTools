@@ -1,0 +1,197 @@
+name: macOS build
+
+# Builds a self-contained macOS (Apple Silicon) build of Tools for Studio
+# One's Avalonia UI, assembles it into a "Tools for Studio One.app" bundle,
+# packages it as a signed .pkg (mirrors six-walls-installer's macos-build.yml,
+# reusing the same mac-sign.sh) and SUBMITS it for notarization -- but does
+# not wait.
+#
+# This is a two-phase release, same as six-walls-installer:
+#   1. This workflow: build, sign, package, submit. Ends in a few minutes
+#      regardless of how long Apple takes, uploading the signed-but-not-yet-
+#      stapled .pkg as "Tools-for-Studio-One-macOS-unstapled".
+#   2. Check status for free with `shared/_apple-signing/notary_status.py`
+#      (a plain HTTPS call to Apple's Notary API -- no macOS runner, no
+#      Actions minutes spent waiting), then run the "macOS staple" workflow
+#      (macos-staple.yml) with this run's id once it says Accepted. That
+#      finishes in under a minute of runner time and produces the real
+#      release artifact + catalog fragment.
+#
+# Why: notarytool --wait ties up this job -- billed at 10x on a macOS
+# runner -- for however long Apple takes, which has run to hours on other
+# Six Walls products, not the usual seconds. Never block-wait on Apple
+# inside a billed job.
+#
+# StudioOneTools.App (WPF, net10.0-windows) is intentionally excluded here --
+# it cannot build on macOS runners (no Windows Desktop SDK workload there).
+# This workflow only builds/signs StudioOneTools.Avalonia, which is the
+# macOS UI for this product.
+#
+# osx-arm64 only -- no Intel-Mac target for a 2026 utility app.
+#
+# CODESIGNING IS OPT-IN, and lives entirely in .github/scripts/mac-sign.sh.
+# With the Developer ID secrets set on this repo the bundle is signed with a
+# hardened runtime and the .pkg is signed with the Developer ID Installer
+# cert. With no secrets every signing step is a no-op and the build ships
+# unsigned -- Gatekeeper then refuses a first launch until the user
+# right-clicks Open. See mac-sign.sh's own header for the secret names.
+#
+# Manual trigger by default, and on a v* tag, same as the other products.
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+concurrency:
+  group: macos-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-macos:
+    runs-on: macos-14
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      # Sets SIGNED / SIGN_* in the job environment for every later step.
+      # Absent secrets are not an error: SIGNED=0 and the build stays unsigned.
+      - name: Import Developer ID certificates
+        env:
+          APPLE_CERT_APP_P12: ${{ secrets.APPLE_CERT_APP_P12 }}
+          APPLE_CERT_APP_PASSWORD: ${{ secrets.APPLE_CERT_APP_PASSWORD }}
+          APPLE_CERT_INSTALLER_P12: ${{ secrets.APPLE_CERT_INSTALLER_P12 }}
+          APPLE_CERT_INSTALLER_PASSWORD: ${{ secrets.APPLE_CERT_INSTALLER_PASSWORD }}
+          APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+        run: .github/scripts/mac-sign.sh setup
+
+      - name: Read project version
+        id: ver
+        run: |
+          V=$(grep -m1 '<Version>' src/StudioOneTools.Avalonia/StudioOneTools.Avalonia.csproj | sed -E 's/.*<Version>([0-9.]+)<\/Version>.*/\1/')
+          test -n "$V"
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+          echo "Tools for Studio One version: $V"
+
+      - name: Restore + build + test
+        run: |
+          dotnet build src/StudioOneTools.Core/StudioOneTools.Core.csproj -c Release
+          dotnet build src/StudioOneTools.StudioOne/StudioOneTools.StudioOne.csproj -c Release
+          dotnet build src/StudioOneTools.Avalonia/StudioOneTools.Avalonia.csproj -c Release
+          dotnet test tests/StudioOneTools.Tests/StudioOneTools.Tests.csproj -c Release
+
+      - name: Publish (osx-arm64)
+        run: |
+          dotnet publish src/StudioOneTools.Avalonia/StudioOneTools.Avalonia.csproj \
+            -c Release -r osx-arm64 --self-contained -p:PublishSingleFile=true -o publish
+          echo "--- publish/ contents ---"
+          ls -la publish/
+
+      - name: Assemble .app bundle
+        id: app
+        run: |
+          set -euo pipefail
+          VER="${{ steps.ver.outputs.version }}"
+          APP="Tools for Studio One.app"
+          rm -rf "$APP"
+          mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+
+          # The publish output name isn't guaranteed to exactly equal the
+          # csproj name on osx-arm64, so find it rather than assume.
+          BIN=$(find publish -maxdepth 1 -type f -perm -u+x ! -name '*.dylib' | head -1)
+          test -n "$BIN" || { echo "no executable found in publish/"; ls -la publish/; exit 1; }
+          echo "executable: $BIN"
+          cp "$BIN" "$APP/Contents/MacOS/StudioOneTools"
+          chmod +x "$APP/Contents/MacOS/StudioOneTools"
+          # A self-contained (non-AOT) publish still drops the Avalonia/Skia
+          # native libs alongside the executable rather than folding them in
+          # -- ship every one.
+          find publish -maxdepth 1 -name '*.dylib' -exec cp {} "$APP/Contents/MacOS/" \;
+
+          sed "s/__VERSION__/$VER/g" installer/Info.plist > "$APP/Contents/Info.plist"
+
+          # Generate icon.icns from the brand mark -- no .icns exists anywhere
+          # in the repo yet, and there's no MSBuild ApplicationIcon equivalent
+          # for a plain self-contained publish on macOS.
+          ICONSET="$RUNNER_TEMP/icon.iconset"
+          rm -rf "$ICONSET"; mkdir -p "$ICONSET"
+          for size in 16 32 64 128 256 512 1024; do
+            sips -z "$size" "$size" src/StudioOneTools.Avalonia/Branding/Assets/six_walls_mark.png \
+              --out "$ICONSET/icon_${size}x${size}.png" > /dev/null
+          done
+          cp "$ICONSET/icon_32x32.png"     "$ICONSET/icon_16x16@2x.png"
+          cp "$ICONSET/icon_64x64.png"     "$ICONSET/icon_32x32@2x.png"
+          cp "$ICONSET/icon_256x256.png"   "$ICONSET/icon_128x128@2x.png"
+          cp "$ICONSET/icon_512x512.png"   "$ICONSET/icon_256x256@2x.png"
+          cp "$ICONSET/icon_1024x1024.png" "$ICONSET/icon_512x512@2x.png"
+          iconutil -c icns "$ICONSET" -o "$APP/Contents/Resources/icon.icns"
+
+          echo "--- bundle contents ---"
+          find "$APP" -maxdepth 3
+
+      # No headless --report CLI mode exists here (it's a GUI-only app, unlike
+      # the Installer) -- the closest safe smoke check on a display-less
+      # runner is confirming the binary is actually a valid Mach-O executable.
+      - name: Smoke check (Mach-O sanity)
+        run: |
+          file "Tools for Studio One.app/Contents/MacOS/StudioOneTools" | grep -q "Mach-O"
+
+      - name: Package
+        id: pkg
+        run: |
+          set -euo pipefail
+          WS="$PWD"
+          SIGN="$WS/.github/scripts/mac-sign.sh"
+          VER="${{ steps.ver.outputs.version }}"
+          APP="$WS/Tools for Studio One.app"
+
+          # Sign each nested dylib individually BEFORE the bundle itself, same
+          # reasoning as six-walls-installer: codesign on a bundle (no --deep)
+          # leaves a nested binary alone if it already carries a signature,
+          # and some Avalonia-native dylibs ship pre-signed with something
+          # that has no Developer ID and no secure timestamp -- notarization
+          # then rejects that outright. Signing directly always overwrites it.
+          "$SIGN" bundle "$APP"/Contents/MacOS/*.dylib
+          "$SIGN" bundle "$APP"
+
+          ROOT="$RUNNER_TEMP/pkgroot"
+          rm -rf "$ROOT"
+          mkdir -p "$ROOT/Applications"
+          cp -R "$APP" "$ROOT/Applications/"
+
+          PKG="Tools-for-Studio-One-$VER-macOS.pkg"
+          pkgbuild \
+            --root "$ROOT" \
+            --identifier com.sixwalls.studioonetools.app \
+            --version "$VER" \
+            --install-location / \
+            "$WS/$PKG"
+          "$SIGN" pkg "$WS/$PKG"
+
+          # Does NOT wait -- see the header comment. Submits the signed-but-
+          # not-yet-stapled .pkg and prints the submission id to
+          # notarization-id.txt; check it later with notary_status.py, then
+          # run the "macOS staple" workflow once it says Accepted.
+          "$SIGN" submit "$WS/$PKG"
+
+          echo "pkg=$PKG" >> "$GITHUB_OUTPUT"
+          echo "--- sha256 (pre-staple; will change once stapled) ---"
+          shasum -a 256 "$WS/$PKG"
+          ls -l "$WS/$PKG"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Tools-for-Studio-One-macOS-unstapled
+          path: |
+            Tools-for-Studio-One-*-macOS.pkg
+            notarization-id.txt
+          if-no-files-found: error

@@ -1,0 +1,195 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:branding="clr-namespace:StudioOneTools.Avalonia.Branding"
+        xmlns:converters="clr-namespace:StudioOneTools.Avalonia.Converters"
+        x:Class="StudioOneTools.Avalonia.SongArchiverWindow"
+        Title="Six Walls — Song Archiver"
+        Icon="/Branding/Assets/six_walls_mark.png"
+        Width="1180"
+        Height="780"
+        MinWidth="1040"
+        MinHeight="720"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <converters:ProgressToBrushConverter x:Key="ProgressToBrush" />
+    </Window.Resources>
+
+    <Grid Margin="16" RowDefinitions="Auto,Auto,Auto,Auto,*,Auto" ColumnDefinitions="*,Auto">
+
+        <Grid Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,12" ColumnDefinitions="*,Auto">
+            <branding:BrandHeader Grid.Column="0" Screen="Song Archiver" />
+
+            <Button Grid.Column="1"
+                    Padding="16,6"
+                    VerticalAlignment="Top"
+                    Click="SettingsButton_OnClick"
+                    Content="⚙ Settings"
+                    ToolTip.Tip="Configure default folders" />
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,12" ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Grid.Column="0"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Text="Song folder" />
+
+            <TextBox x:Name="SourceFolderPathTextBox"
+                     Grid.Column="1"
+                     MinWidth="520"
+                     Padding="8,6"
+                     Text="{Binding SourceFolderPath, Mode=TwoWay}"
+                     TextChanged="SourceFolderPathTextBox_OnTextChanged" />
+
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Click="BrowseSongFolderButton_OnClick"
+                    Content="Browse..." />
+        </Grid>
+
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" Margin="0,0,0,12" ColumnDefinitions="Auto,*,Auto">
+            <TextBlock Grid.Column="0"
+                       Margin="0,0,12,0"
+                       VerticalAlignment="Center"
+                       Text="Archive file" />
+
+            <TextBox Grid.Column="1"
+                     MinWidth="520"
+                     Padding="8,6"
+                     Text="{Binding ArchiveFilePath, Mode=TwoWay}" />
+
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Click="BrowseArchiveFileButton_OnClick"
+                    Content="Save As..." />
+        </Grid>
+
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Margin="0,0,0,12" Orientation="Horizontal">
+            <CheckBox Margin="0,0,20,0"
+                      IsChecked="{Binding RetainMixdownFiles, Mode=TwoWay}"
+                      Content="Retain Mixdown files" />
+            <CheckBox Margin="0,0,20,0"
+                      IsChecked="{Binding RetainMasterFiles, Mode=TwoWay}"
+                      Content="Retain Master files" />
+            <Button Padding="16,6"
+                    Margin="0,0,12,0"
+                    Click="ArchiveButton_OnClick"
+                    Content="Create Archive"
+                    IsEnabled="{Binding CanArchive}" />
+        </StackPanel>
+
+        <Grid Grid.Row="4" Grid.ColumnSpan="2" RowDefinitions="Auto,*">
+
+            <Border Grid.Row="0"
+                    Margin="0,0,0,12"
+                    Padding="12"
+                    BorderBrush="{StaticResource SwHairlineSoftBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6">
+                <Grid ColumnDefinitions="2*,Auto,Auto,Auto">
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock FontWeight="SemiBold" Text="{Binding SongName}" />
+                        <TextBlock Margin="0,6,0,0" Text="{Binding SongFilePath}" TextWrapping="Wrap" />
+                        <ScrollViewer Margin="0,6,0,0" MaxHeight="90" VerticalScrollBarVisibility="Auto">
+                            <TextBlock Text="{Binding IssuesSummary}" TextWrapping="Wrap" />
+                        </ScrollViewer>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="24,0,16,0">
+                        <TextBlock FontWeight="SemiBold" Text="Used WAVs" />
+                        <TextBlock FontSize="22" Text="{Binding UsedWaveFileCount}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" Margin="0,0,24,0">
+                        <TextBlock FontWeight="SemiBold" Text="Unused WAVs" />
+                        <TextBlock FontSize="22" Text="{Binding UnusedWaveFileCount}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                        <TextBlock FontWeight="SemiBold" Text="Preview" />
+                        <TextBlock Margin="0,4,0,0"
+                                   FontSize="11"
+                                   Foreground="{StaticResource SwTextDimBrush}"
+                                   Text="{Binding PreviewLabel}"
+                                   TextWrapping="Wrap"
+                                   MaxWidth="180" />
+                        <Button Margin="0,8,0,0"
+                                Padding="12,6"
+                                IsEnabled="{Binding HasPreviewFile}"
+                                Content="{Binding PlayButtonContent}"
+                                Click="PlayPreviewButton_OnClick" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <DataGrid Grid.Row="1"
+                      AutoGenerateColumns="False"
+                      IsReadOnly="False"
+                      ItemsSource="{Binding MediaFiles}">
+                <DataGrid.Styles>
+                    <Style Selector="DataGridRow">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource ProgressToBrush}">
+                                    <Binding Path="IsSelected" RelativeSource="{RelativeSource Self}" />
+                                    <Binding Path="PlaybackProgress" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </DataGrid.Styles>
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="Play" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="▶"
+                                        Padding="8,4"
+                                        FontSize="12"
+                                        Click="PlayMediaFile_OnClick"
+                                        ToolTip.Tip="Play audio file"
+                                        IsEnabled="{Binding IsWaveFile}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Binding="{Binding FileName}" Header="File" Width="220" />
+                    <DataGridTextColumn Binding="{Binding RelativePath}" Header="Relative Path" Width="*" />
+                    <DataGridCheckBoxColumn Binding="{Binding IsUsed}" Header="Used" Width="80" />
+                    <DataGridCheckBoxColumn Binding="{Binding ExistsOnDisk}" Header="Exists" Width="80" />
+                    <DataGridTextColumn Binding="{Binding UseCount}" Header="Use Count" Width="90" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <Border Grid.Row="5"
+                Grid.ColumnSpan="2"
+                Margin="0,12,0,0"
+                Padding="10"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
+                BorderThickness="1"
+                CornerRadius="6">
+            <TextBlock Text="{Binding StatusMessage}" TextWrapping="Wrap" />
+        </Border>
+
+        <Grid Grid.Row="0"
+              Grid.RowSpan="6"
+              Grid.Column="0"
+              Grid.ColumnSpan="2"
+              Background="{StaticResource SwOverlayBrush}"
+              IsVisible="{Binding IsArchiving}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressBar IsIndeterminate="True"
+                             Width="300"
+                             Height="6" />
+                <TextBlock Margin="0,16,0,0"
+                           Foreground="White"
+                           FontSize="15"
+                           HorizontalAlignment="Center"
+                           Text="Creating archive, please wait…" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

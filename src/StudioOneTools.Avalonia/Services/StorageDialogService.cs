@@ -38,6 +38,25 @@ public sealed class StorageDialogService : IStorageDialogService
         return result.Count > 0 ? result[0].TryGetLocalPath() : null;
     }
 
+    public async Task<string?> PickSaveFileAsync(Window owner, string title, string filterName, string[] extensions, string suggestedFileName, string? suggestedStartPath = null)
+    {
+        var patterns      = extensions.Select(ext => $"*.{ext}").ToArray();
+        var startLocation = await ResolveStartFolderAsync(owner, suggestedStartPath);
+
+        var result = await owner.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            Title                  = title,
+            SuggestedFileName      = suggestedFileName,
+            SuggestedStartLocation = startLocation,
+            FileTypeChoices =
+            [
+                new FilePickerFileType(filterName) { Patterns = patterns },
+            ],
+        });
+
+        return result?.TryGetLocalPath();
+    }
+
     private static async Task<IStorageFolder?> ResolveStartFolderAsync(Window owner, string? suggestedStartPath)
     {
         if (string.IsNullOrWhiteSpace(suggestedStartPath) || !Directory.Exists(suggestedStartPath))

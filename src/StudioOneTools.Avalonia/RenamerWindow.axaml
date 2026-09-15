@@ -1,0 +1,236 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:branding="clr-namespace:StudioOneTools.Avalonia.Branding"
+        x:Class="StudioOneTools.Avalonia.RenamerWindow"
+        Title="Six Walls — Song ReNamer"
+        Icon="/Branding/Assets/six_walls_mark.png"
+        Width="720"
+        Height="500"
+        MinWidth="520"
+        MinHeight="400"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_OnLoaded">
+
+    <Window.Styles>
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="{StaticResource SwAccentBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="Border"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ Border#Border">
+            <Setter Property="Background" Value="{StaticResource SwAccentHoverBrush}" />
+        </Style>
+        <Style Selector="Button.primary:pressed /template/ Border#Border">
+            <Setter Property="Background" Value="{StaticResource SwAccentDeepBrush}" />
+        </Style>
+        <Style Selector="Button.primary:disabled /template/ Border#Border">
+            <Setter Property="Background" Value="{StaticResource SwAccentDisabledBrush}" />
+        </Style>
+        <Style Selector="Button.primary:disabled">
+            <Setter Property="Foreground" Value="{StaticResource SwOnAccentDisabledBrush}" />
+        </Style>
+
+        <Style Selector="Button.suggestion-chip">
+            <Setter Property="Background" Value="{StaticResource SwAccentWashBrush}" />
+            <Setter Property="Foreground" Value="{StaticResource SwAccentDeepBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource SwAccentBorderBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="14,5" />
+            <Setter Property="Margin" Value="0,0,8,8" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="Border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="14">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          Content="{TemplateBinding Content}"
+                                          Margin="{TemplateBinding Padding}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        <Style Selector="Button.suggestion-chip:pointerover /template/ Border#Border">
+            <Setter Property="Background" Value="{StaticResource SwAccentWashHoverBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource SwAccentBrush}" />
+        </Style>
+        <Style Selector="Button.suggestion-chip:pressed /template/ Border#Border">
+            <Setter Property="Background" Value="{StaticResource SwAccentPressBrush}" />
+        </Style>
+    </Window.Styles>
+
+    <Grid Margin="16" RowDefinitions="Auto,Auto,*,Auto">
+
+        <branding:BrandHeader Grid.Row="0"
+                              Margin="0,0,0,14"
+                              Screen="Song ReNamer" />
+
+        <!-- Folder row -->
+        <Grid Grid.Row="1" Margin="0,0,0,16" ColumnDefinitions="90,*,Auto">
+            <TextBlock Grid.Column="0"
+                       VerticalAlignment="Center"
+                       Text="Song folder" />
+
+            <TextBox x:Name="FolderPathTextBox"
+                     Grid.Column="1"
+                     Padding="8,6"
+                     Text="{Binding FolderPath, Mode=TwoWay}"
+                     TextChanged="FolderPathTextBox_OnTextChanged" />
+
+            <Button Grid.Column="2"
+                    Margin="12,0,0,0"
+                    Padding="16,6"
+                    Content="Browse..."
+                    Click="BrowseButton_OnClick" />
+        </Grid>
+
+        <!-- Middle area: placeholder or analysis section -->
+        <Grid Grid.Row="2">
+
+            <TextBlock Foreground="{StaticResource SwTextFaintBrush}"
+                       FontSize="13"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Text="Browse to a Studio One song folder to get started."
+                       IsVisible="{Binding HasNoAnalysis}" />
+
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          IsVisible="{Binding HasAnalysis}">
+                <StackPanel>
+
+                    <!-- Current name band -->
+                    <Border Background="{StaticResource SwAccentWashBrush}"
+                            BorderBrush="{StaticResource SwAccentBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="14,10"
+                            Margin="0,0,0,16">
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <TextBlock Grid.Column="0"
+                                       Text="Current name"
+                                       Foreground="{StaticResource SwTextDimBrush}"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,14,0" />
+
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding CurrentName}"
+                                       FontWeight="SemiBold"
+                                       FontSize="14"
+                                       VerticalAlignment="Center" />
+
+                            <Border Grid.Column="2"
+                                    Background="#FFFFF3CD"
+                                    BorderBrush="#FFFFC107"
+                                    BorderThickness="1"
+                                    CornerRadius="4"
+                                    Padding="8,4"
+                                    VerticalAlignment="Center"
+                                    IsVisible="{Binding IsDefaultName}">
+                                <TextBlock Text="Default name"
+                                           FontSize="11"
+                                           Foreground="#FF856404" />
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <!-- Suggestions -->
+                    <StackPanel IsVisible="{Binding HasSuggestions}"
+                                Margin="0,0,0,16">
+                        <TextBlock Text="Suggested names from .song files:"
+                                   FontSize="12"
+                                   Foreground="{StaticResource SwTextDimBrush}"
+                                   Margin="0,0,0,8" />
+                        <ItemsControl ItemsSource="{Binding Suggestions}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Content="{Binding}"
+                                            Classes="suggestion-chip"
+                                            Click="SuggestionChip_OnClick" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <!-- New name input -->
+                    <Grid Margin="0,0,0,16" ColumnDefinitions="90,*">
+                        <TextBlock Grid.Column="0"
+                                   VerticalAlignment="Center"
+                                   Text="New name" />
+
+                        <TextBox Grid.Column="1"
+                                 Padding="8,6"
+                                 Text="{Binding NewName, Mode=TwoWay}" />
+                    </Grid>
+
+                    <!-- Action buttons -->
+                    <StackPanel Orientation="Horizontal">
+                        <Button Padding="14,8"
+                                Margin="0,0,8,0"
+                                IsVisible="{Binding HasPreview}"
+                                Content="{Binding PlayButtonContent}"
+                                Click="PlayButton_OnClick" />
+
+                        <Button Padding="16,8"
+                                Classes="primary"
+                                IsEnabled="{Binding CanRename}"
+                                Content="Rename"
+                                Click="RenameButton_OnClick" />
+                    </StackPanel>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Status bar -->
+        <Border Grid.Row="3"
+                Margin="0,10,0,0"
+                Padding="10"
+                Background="{StaticResource SwWindowBrush}"
+                BorderBrush="{StaticResource SwHairlineBrush}"
+                BorderThickness="1"
+                CornerRadius="6">
+            <TextBlock Text="{Binding StatusMessage}"
+                       TextWrapping="Wrap" />
+        </Border>
+
+        <!-- Busy overlay -->
+        <Grid Grid.Row="0"
+              Grid.RowSpan="4"
+              Background="{StaticResource SwOverlayBrush}"
+              IsVisible="{Binding IsBusy}">
+            <StackPanel HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <ProgressBar IsIndeterminate="True"
+                             Width="300"
+                             Height="6" />
+                <TextBlock Margin="0,16,0,0"
+                           Foreground="White"
+                           FontSize="15"
+                           HorizontalAlignment="Center"
+                           Text="{Binding StatusMessage}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

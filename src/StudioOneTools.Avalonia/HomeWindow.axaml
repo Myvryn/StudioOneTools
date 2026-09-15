@@ -60,11 +60,8 @@
                     VerticalAlignment="Center"
                     Click="HelpButton_OnClick">
                 <StackPanel Orientation="Horizontal" Spacing="6">
-                    <Path Data="{StaticResource IconSettings}"
-                          Stroke="Black"
-                          StrokeThickness="1.8"
-                          StrokeJoin="Round"
-                          Fill="Transparent"
+                    <Path Data="{StaticResource IconHelp}"
+                          Fill="Black"
                           Width="14"
                           Height="14"
                           Stretch="Uniform"
@@ -81,14 +78,10 @@
                      VerticalAlignment="Center">
 
             <Button Classes="card"
-                    IsEnabled="False"
                     Click="SongArchiverCard_OnClick">
                 <StackPanel HorizontalAlignment="Center">
-                    <Path Data="{StaticResource IconBackup}"
-                          Stroke="{StaticResource SwTextFaintBrush}"
-                          StrokeThickness="1.6"
-                          StrokeJoin="Round"
-                          Fill="Transparent"
+                    <Path Data="{StaticResource IconArchiver}"
+                          Fill="{StaticResource SwToolArchiverBrush}"
                           Width="40"
                           Height="40"
                           Stretch="Uniform"
@@ -105,7 +98,7 @@
                                MaxWidth="160"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
-                               Text="Coming soon on Mac." />
+                               Text="Archive song folders and manage media files." />
                 </StackPanel>
             </Button>
 
@@ -113,10 +106,7 @@
                     Click="UnArchiverCard_OnClick">
                 <StackPanel HorizontalAlignment="Center">
                     <Path Data="{StaticResource IconUnArchiver}"
-                          Stroke="{StaticResource SwToolUnArchiverBrush}"
-                          StrokeThickness="1.8"
-                          StrokeJoin="Round"
-                          Fill="Transparent"
+                          Fill="{StaticResource SwToolUnArchiverBrush}"
                           Width="40"
                           Height="40"
                           Stretch="Uniform"
@@ -141,10 +131,7 @@
                     Click="SweeperCard_OnClick">
                 <StackPanel HorizontalAlignment="Center">
                     <Path Data="{StaticResource IconSweeper}"
-                          Stroke="{StaticResource SwToolSweeperBrush}"
-                          StrokeThickness="1.8"
-                          StrokeJoin="Round"
-                          Fill="Transparent"
+                          Fill="{StaticResource SwToolSweeperBrush}"
                           Width="40"
                           Height="40"
                           Stretch="Uniform"
@@ -169,10 +156,7 @@
                     Click="BackupCard_OnClick">
                 <StackPanel HorizontalAlignment="Center">
                     <Path Data="{StaticResource IconBackup}"
-                          Stroke="{StaticResource SwToolBackupBrush}"
-                          StrokeThickness="1.8"
-                          StrokeJoin="Round"
-                          Fill="Transparent"
+                          Fill="{StaticResource SwToolBackupBrush}"
                           Width="40"
                           Height="40"
                           Stretch="Uniform"
@@ -194,14 +178,10 @@
             </Button>
 
             <Button Classes="card"
-                    IsEnabled="False"
                     Click="RenamerCard_OnClick">
                 <StackPanel HorizontalAlignment="Center">
-                    <Path Data="{StaticResource IconPathFixer}"
-                          Stroke="{StaticResource SwTextFaintBrush}"
-                          StrokeThickness="1.6"
-                          StrokeJoin="Round"
-                          Fill="Transparent"
+                    <Path Data="{StaticResource IconRenamer}"
+                          Fill="{StaticResource SwToolRenamerBrush}"
                           Width="40"
                           Height="40"
                           Stretch="Uniform"
@@ -218,7 +198,7 @@
                                MaxWidth="160"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
-                               Text="Coming soon on Mac." />
+                               Text="Rename the entire song package — folder, files, and references." />
                 </StackPanel>
             </Button>
 
@@ -226,10 +206,7 @@
                     Click="PathFixerCard_OnClick">
                 <StackPanel HorizontalAlignment="Center">
                     <Path Data="{StaticResource IconPathFixer}"
-                          Stroke="{StaticResource SwToolPathFixerBrush}"
-                          StrokeThickness="1.8"
-                          StrokeJoin="Round"
-                          Fill="Transparent"
+                          Fill="{StaticResource SwToolPathFixerBrush}"
                           Width="40"
                           Height="40"
                           Stretch="Uniform"

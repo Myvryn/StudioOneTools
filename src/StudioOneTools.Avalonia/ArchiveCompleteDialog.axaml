@@ -1,0 +1,47 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="StudioOneTools.Avalonia.ArchiveCompleteDialog"
+        Title="Six Walls — Archive Complete"
+        Icon="/Branding/Assets/six_walls_mark.png"
+        Width="450"
+        Height="260"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False">
+
+    <Grid Margin="16" RowDefinitions="Auto,Auto,*,Auto">
+
+        <TextBlock Grid.Row="0"
+                   Margin="0,0,0,12"
+                   FontSize="14"
+                   FontWeight="SemiBold"
+                   Text="Archive created successfully!" />
+
+        <TextBlock Grid.Row="1"
+                   Margin="0,0,0,16"
+                   TextWrapping="Wrap"
+                   Text="Do you want to delete the original song folder?" />
+
+        <StackPanel Grid.Row="2" VerticalAlignment="Top">
+            <CheckBox x:Name="RemoveFromRecentDocsCheckBox"
+                      IsChecked="True"
+                      Content="Remove from Studio One Recent Documents" />
+            <CheckBox x:Name="OpenFolderCheckBox"
+                      Margin="0,10,0,0"
+                      IsChecked="False"
+                      Content="Open Archive Folder" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="3"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal"
+                    Spacing="8">
+            <Button Padding="16,6"
+                    Content="No"
+                    Click="NoButton_OnClick" />
+            <Button Padding="16,6"
+                    Content="Yes"
+                    Click="YesButton_OnClick" />
+        </StackPanel>
+    </Grid>
+</Window>

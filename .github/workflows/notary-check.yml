@@ -1,0 +1,40 @@
+name: notary check
+
+# Cheap, throwaway diagnostic: checks the status/log of an existing
+# notarytool submission id without rebuilding or resubmitting anything.
+# Added 2026-09-14 while chasing an Apple-side notary delay on macos-build.yml
+# -- a full rebuild costs many minutes of billed macOS runner time, this
+# costs about as long as importing the cert and making one API call.
+
+on:
+  workflow_dispatch:
+    inputs:
+      submission_id:
+        description: 'notarytool submission id to check'
+        required: true
+
+jobs:
+  check:
+    runs-on: macos-14
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Import Developer ID certificates
+        env:
+          APPLE_CERT_APP_P12: ${{ secrets.APPLE_CERT_APP_P12 }}
+          APPLE_CERT_APP_PASSWORD: ${{ secrets.APPLE_CERT_APP_PASSWORD }}
+          APPLE_CERT_INSTALLER_P12: ${{ secrets.APPLE_CERT_INSTALLER_P12 }}
+          APPLE_CERT_INSTALLER_PASSWORD: ${{ secrets.APPLE_CERT_INSTALLER_PASSWORD }}
+          APPLE_API_KEY_P8: ${{ secrets.APPLE_API_KEY_P8 }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+        run: .github/scripts/mac-sign.sh setup
+
+      - name: Check submission
+        run: |
+          set -x
+          xcrun notarytool info "${{ inputs.submission_id }}" \
+            --key "$SIGN_API_KEY" --key-id "$SIGN_API_KEY_ID" --issuer "$SIGN_API_ISSUER"
+          xcrun notarytool log "${{ inputs.submission_id }}" \
+            --key "$SIGN_API_KEY" --key-id "$SIGN_API_KEY_ID" --issuer "$SIGN_API_ISSUER" || true

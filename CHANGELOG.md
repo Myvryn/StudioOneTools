@@ -9,6 +9,27 @@ git history.
 
 ---
 
+## 1.4.0 — 2026-09-15 (macOS only)
+
+First real macOS release. Windows stays on 1.3.2 — nothing changed there
+this round.
+
+- Song Archiver and Song ReNamer, the last two tools missing from the
+  macOS (Avalonia) build, are now fully implemented: same folder analysis,
+  missing-media detection, media-file grid, and WAV preview as Windows.
+  All six tools are now available on both platforms.
+- New cross-platform audio preview for WAV playback (Windows: hidden
+  PowerShell `SoundPlayer`; macOS: `afplay`), replacing WPF's Windows-only
+  `MediaPlayer`.
+- Fixed: every `DataGrid` in the macOS build (Sweeper, Song Archiver, the
+  multi-song picker) was rendering with no visible rows or headers — the
+  DataGrid control's theme was never registered in the app.
+- Redrew the Home screen's tool icons to match the polished, filled glyph
+  style already used on Windows, replacing thin placeholder line icons
+  (including two that had been silently duplicated between tools).
+- Signed and notarized with the same Developer ID used for the plugins and
+  The Installer.
+
 ## 1.3.2 — 2026-09-11
 
 No functional app changes. Packaging only:

@@ -8,10 +8,12 @@ public partial class HomeWindow : Window
 {
     #region Fields
 
-    private SweeperWindow?    _sweeperWindow;
-    private BackupWindow?     _backupWindow;
-    private PathFixerWindow?  _pathFixerWindow;
-    private UnArchiverWindow? _unArchiverWindow;
+    private SweeperWindow?       _sweeperWindow;
+    private BackupWindow?        _backupWindow;
+    private PathFixerWindow?     _pathFixerWindow;
+    private UnArchiverWindow?    _unArchiverWindow;
+    private RenamerWindow?       _renamerWindow;
+    private SongArchiverWindow?  _songArchiverWindow;
 
     #endregion
 
@@ -28,7 +30,16 @@ public partial class HomeWindow : Window
 
     private void SongArchiverCard_OnClick(object? sender, RoutedEventArgs e)
     {
-        // Song Archiver is not yet ported to macOS -- card is disabled, no-op.
+        if (_songArchiverWindow is null)
+        {
+            _songArchiverWindow        = new SongArchiverWindow();
+            _songArchiverWindow.Closed += (_, _) => _songArchiverWindow = null;
+            _songArchiverWindow.Show();
+        }
+        else
+        {
+            _songArchiverWindow.Activate();
+        }
     }
 
     private void SweeperCard_OnClick(object? sender, RoutedEventArgs e)
@@ -61,7 +72,16 @@ public partial class HomeWindow : Window
 
     private void RenamerCard_OnClick(object? sender, RoutedEventArgs e)
     {
-        // Song ReNamer is not yet ported to macOS -- card is disabled, no-op.
+        if (_renamerWindow is null)
+        {
+            _renamerWindow        = new RenamerWindow();
+            _renamerWindow.Closed += (_, _) => _renamerWindow = null;
+            _renamerWindow.Show();
+        }
+        else
+        {
+            _renamerWindow.Activate();
+        }
     }
 
     private void UnArchiverCard_OnClick(object? sender, RoutedEventArgs e)
