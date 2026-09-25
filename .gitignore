@@ -364,3 +364,6 @@ FodyWeavers.xsd
 # Installer build output (installer/build-installer.ps1)
 installer/dist/
 installer/vendor/
+
+# Stray Studio One test songs
+*.song
