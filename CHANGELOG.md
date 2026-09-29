@@ -16,10 +16,11 @@ git history.
   so macOS killed it at startup. Now signed with them, and the build checks
   that the signed app actually stays running before it is packaged.
 
-## 1.4.0 — 2026-09-15 (macOS only)
+## 1.4.0 — 2026-09-15 (macOS), 2026-09-29 (Windows)
 
-First real macOS release. Windows stays on 1.3.2 — nothing changed there
-this round.
+First real macOS release. On 2026-09-29 Windows moved from 1.3.2 to 1.4.0 so
+both platforms share the same Major.Minor version. There are no functional
+changes on Windows: it behaves exactly like 1.3.2.
 
 - Song Archiver and Song ReNamer, the last two tools missing from the
   macOS (Avalonia) build, are now fully implemented: same folder analysis,
