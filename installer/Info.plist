@@ -2,9 +2,11 @@
 <!--
   Template for "Tools for Studio One.app"/Contents/Info.plist. There is no
   MSBuild-driven macOS app-bundling step (unlike Icon/ApplicationManifest on
-  Windows -- see StudioOneTools.Avalonia.csproj), so macos-build.yml
+  Windows, see StudioOneTools.Avalonia.csproj), so build-mac.sh
   assembles the .app by hand from the publish output plus this file,
-  substituting __VERSION__ for the csproj <Version>.
+  substituting __VERSION__ for the csproj Version. Keep double hyphens out of
+  this comment: it is copied into the shipped app, and the Installer's XML
+  parser rejects them.
 -->
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
