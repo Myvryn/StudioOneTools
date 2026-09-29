@@ -5,6 +5,11 @@
 #
 #   mac-sign.sh setup                 read the repo secrets, build a throwaway
 #                                     keychain, export SIGN_* into GITHUB_ENV
+#   mac-sign.sh setup-local           self-hosted runner only: unlock the
+#                                     persistent build.keychain already on
+#                                     this Mac and export SIGN_* from the
+#                                     identities/credentials already there
+#                                     (no secrets, no throwaway keychain)
 #   mac-sign.sh bundle <path>...      sign a .vst3 / .component (hardened runtime)
 #   mac-sign.sh pkg <path>...         sign a .pkg in place (Developer ID Installer)
 #   mac-sign.sh notarize <path>...    submit to notarytool and wait
@@ -95,14 +100,49 @@ setup () {
   fi
 }
 
+setup_local () {
+  # Self-hosted-runner counterpart to setup(): the identities and credentials
+  # already live on this specific Mac (imported once, not per-CI-run from
+  # secrets) -- see the "Credentials now living on the Mac" section of the
+  # mac-mini-self-hosted-runner memory. Every fresh launchd/SSH job is its
+  # own Security Session, so the keychain unlock still has to happen here,
+  # every run, same as Invoke-AaxSign's macOS branch does for PACE signing.
+  local kc='build.keychain'
+  local kcpw
+  kcpw=$(cat "$HOME/.build-keychain-pw")
+  security unlock-keychain -p "$kcpw" "$kc"
+
+  local app inst
+  app=$(security find-identity -v "$kc"  | awk '/Developer ID Application/ {print $2; exit}')
+  inst=$(security find-identity -v "$kc" | awk '/Developer ID Installer/   {print $2; exit}')
+  [ -n "$app" ] || { say "no Developer ID Application identity in $kc"; exit 1; }
+  [ -n "$inst" ] || say "WARNING: no Developer ID Installer identity -- .pkg signing will be skipped."
+
+  {
+    echo "SIGNED=1"
+    echo "SIGN_KEYCHAIN=$kc"
+    echo "SIGN_APP_IDENTITY=$app"
+    echo "SIGN_INSTALLER_IDENTITY=$inst"
+    echo "SIGN_API_KEY=$HOME/.notary/AuthKey_29T86XAZ5F.p8"
+    echo "SIGN_API_KEY_ID=29T86XAZ5F"
+    echo "SIGN_API_ISSUER=3c357d1f-bb38-4590-acaf-99f1e19f1fc4"
+  } >> "$GITHUB_ENV"
+
+  say "--- local signing identities (setup-local) ---"
+  security find-identity -v "$kc"
+}
+
 sign_bundle () {
   enabled || return 0
   for b in "$@"; do
     say "codesign $b"
     # --options runtime (hardened runtime) is a notarization requirement;
     # --timestamp gets a trusted Apple timestamp so the signature outlives
-    # the certificate. No entitlements: a plug-in inherits the host's.
+    # the certificate. No entitlements by default (a plug-in inherits the
+    # host's); a standalone .NET app sets SIGN_ENTITLEMENTS, or CoreCLR cannot
+    # start under the hardened runtime.
     codesign --force --timestamp --options runtime \
+             ${SIGN_ENTITLEMENTS:+--entitlements "$SIGN_ENTITLEMENTS"} \
              --keychain "$SIGN_KEYCHAIN" --sign "$SIGN_APP_IDENTITY" "$b"
     codesign --verify --strict --verbose=2 "$b"
   done
@@ -204,6 +244,7 @@ cmd=${1:?usage: mac-sign.sh setup|bundle|pkg|notarize|submit|staple|verify ...}
 shift || true
 case "$cmd" in
   setup)    setup ;;
+  setup-local) setup_local ;;
   bundle)   sign_bundle "$@" ;;
   pkg)      sign_pkg "$@" ;;
   notarize) notarize "$@" ;;

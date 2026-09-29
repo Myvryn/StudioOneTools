@@ -9,6 +9,13 @@ git history.
 
 ---
 
+## 1.4.1 — 2026-09-29 (macOS only)
+
+- Fixed: the macOS app did not launch at all — no window, no process. It was
+  signed for the hardened runtime without the entitlements a .NET app needs,
+  so macOS killed it at startup. Now signed with them, and the build checks
+  that the signed app actually stays running before it is packaged.
+
 ## 1.4.0 — 2026-09-15 (macOS only)
 
 First real macOS release. Windows stays on 1.3.2 — nothing changed there

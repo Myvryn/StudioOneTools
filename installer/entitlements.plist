@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Hardened-runtime entitlements for "Tools for Studio One.app". Notarization
+  requires the hardened runtime, and under it a self-contained .NET app cannot
+  start without these: CoreCLR JITs code (allow-jit, allow-unsigned-executable-
+  memory), and the single-file host self-extracts native libraries that carry
+  no matching Team ID (disable-library-validation). Without them the OS kills
+  the process at launch (exit 137, no window, nothing in Activity Monitor).
+  That was the 1.4.0 bug. Keep double hyphens out of this comment, AMFI's
+  XML parser rejects them.
+-->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.security.cs.allow-jit</key>
+	<true/>
+	<key>com.apple.security.cs.allow-unsigned-executable-memory</key>
+	<true/>
+	<key>com.apple.security.cs.disable-library-validation</key>
+	<true/>
+</dict>
+</plist>
