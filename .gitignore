@@ -367,3 +367,6 @@ installer/vendor/
 
 # Stray Studio One test songs
 *.song
+
+# Mac-mini build output (installer/build-mac.ps1)
+dist-mac/
