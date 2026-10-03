@@ -154,12 +154,34 @@ mkdir -p "$ROOT/Applications"
 cp -R "$APP" "$ROOT/Applications/"
 
 PKG="Tools-for-Studio-One-$VER-macOS.pkg"
+COMP="$RUNNER_TEMP/component"
+rm -rf "$COMP"
+mkdir -p "$COMP"
 pkgbuild \
   --root "$ROOT" \
   --identifier com.sixwalls.studioonetools.app \
   --version "$VER" \
   --install-location / \
-  "$WS/$PKG"
+  "$COMP/StudioOneTools.pkg"
+
+# Wrap the component in a product archive whose distribution declares both
+# architectures. A bare component pkg makes Installer.app on Apple Silicon
+# demand Rosetta (same fix as The Installer 1.3.4, 2026-10-03).
+DISTXML="$RUNNER_TEMP/distribution.xml"
+productbuild --synthesize --package "$COMP/StudioOneTools.pkg" "$DISTXML"
+if grep -q 'hostArchitectures=' "$DISTXML"; then
+  sed -i '' -E 's/hostArchitectures="[^"]*"/hostArchitectures="x86_64,arm64"/' "$DISTXML"
+elif grep -q '<options ' "$DISTXML"; then
+  sed -i '' 's|<options |<options hostArchitectures="x86_64,arm64" |' "$DISTXML"
+else
+  sed -i '' 's|</installer-gui-script>|    <options hostArchitectures="x86_64,arm64"/>\
+</installer-gui-script>|' "$DISTXML"
+fi
+sed -i '' 's|</installer-gui-script>|    <title>Tools for Studio One</title>\
+</installer-gui-script>|' "$DISTXML"
+grep -q 'hostArchitectures="x86_64,arm64"' "$DISTXML" || { echo "distribution lacks hostArchitectures"; cat "$DISTXML"; exit 1; }
+cat "$DISTXML"
+productbuild --distribution "$DISTXML" --package-path "$COMP" "$WS/$PKG"
 "$SIGN" pkg "$WS/$PKG"
 
 # Does NOT wait -- see the header comment. Submits the signed-but-
