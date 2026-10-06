@@ -248,7 +248,7 @@
       <ul style="padding-left:20px; font-size:14px; color:#444;">
         <li style="margin-bottom:10px;">
           <strong>Song Archiver</strong> <span class="badge badge-blue">Blue</span><br />
-          Analyses a song folder, identifies used and unused audio files, and packages everything
+          Analyzes a song folder, identifies used and unused audio files, and packages everything
           into a tidy ZIP archive with an HTML inventory report.
         </li>
         <li style="margin-bottom:10px;">
@@ -263,7 +263,7 @@
         </li>
         <li style="margin-bottom:10px;">
           <strong>Song Backup</strong> <span class="badge badge-green">Green</span><br />
-          Synchronises selected song folders to a backup location, copying only new or changed files
+          Synchronizes selected song folders to a backup location, copying only new or changed files
           so each run is fast.
         </li>
         <li style="margin-bottom:10px;">
@@ -288,7 +288,7 @@
     <div class="card accent-blue" id="archiver">
       <h2><span class="icon">🗂️</span> Song Archiver</h2>
       <p class="section-intro">
-        Analyses a Studio One song folder and creates a ZIP archive containing only the files
+        Analyzes a Studio One song folder and creates a ZIP archive containing only the files
         your song actually uses, plus an HTML report of every plugin, channel, and media file.
       </p>
 
@@ -483,7 +483,7 @@
     <div class="card accent-green" id="backup">
       <h2><span class="icon">💾</span> Song Backup</h2>
       <p class="section-intro">
-        Synchronises your song folders to a backup location by copying only new or changed files.
+        Synchronizes your song folders to a backup location by copying only new or changed files.
         Unchanged files are skipped, making each run after the first very fast.
       </p>
 
@@ -606,7 +606,7 @@
         <li>
           <div class="step-body">
             <strong>Click Rename and confirm</strong>
-            <p>A confirmation dialog summarises what will change. The tool then:</p>
+            <p>A confirmation dialog summarizes what will change. The tool then:</p>
             <ul>
               <li>Updates internal path references inside each <code>.song</code> archive</li>
               <li>Renames <code>.song</code> files whose stem matches the old folder name</li>
@@ -618,7 +618,7 @@
         <li>
           <div class="step-body">
             <strong>Done</strong>
-            <p>A summary confirms how many files were renamed. The panel re-analyses the
+            <p>A summary confirms how many files were renamed. The panel re-analyzes the
             renamed folder automatically.</p>
           </div>
         </li>
@@ -677,7 +677,7 @@
         <li>
           <div class="step-body">
             <strong>Done</strong>
-            <p>The tool re-analyses the file and confirms the paths are now correct. Open the
+            <p>The tool re-analyzes the file and confirms the paths are now correct. Open the
             song in Studio One — all media files will be found automatically.</p>
           </div>
         </li>
@@ -773,7 +773,7 @@
         <div class="problem">"Referenced media file is missing"</div>
         <div class="solution">
           One or more WAV files referenced by the song do not exist on disk. Open Studio One,
-          locate the missing files using Pool &rarr; Find Missing Files, then re-analyse.
+          locate the missing files using Pool &rarr; Find Missing Files, then re-analyze.
           Archiving is disabled until all referenced files are present.
         </div>
       </div>
