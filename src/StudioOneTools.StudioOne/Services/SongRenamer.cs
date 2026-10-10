@@ -94,10 +94,19 @@ public sealed class SongRenamer : ISongRenamer
             }
         }
 
-        // 2. Rename .song files whose stem matches oldName.
+        // 2. Rename .song files whose stem matches oldName. When the folder holds exactly
+        //    one .song and its name differs from the folder's, that song is the one being
+        //    renamed (otherwise the folder and song names would end up out of step).
+        var songName = oldName;
+
+        if (songFiles.Length == 1)
+        {
+            songName = Path.GetFileNameWithoutExtension(songFiles[0]);
+        }
+
         foreach (var songFile in songFiles)
         {
-            if (!string.Equals(Path.GetFileNameWithoutExtension(songFile), oldName, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(Path.GetFileNameWithoutExtension(songFile), songName, StringComparison.OrdinalIgnoreCase))
             {
                 continue;
             }
@@ -115,7 +124,7 @@ public sealed class SongRenamer : ISongRenamer
             }
         }
 
-        // 3. Rename Mixdown/Master audio files that start with oldName.
+        // 3. Rename Mixdown/Master audio files that start with the song's name.
         foreach (var subDir in new[] { "Mixdown", "Master" })
         {
             var subDirPath = Path.Combine(folderPath, subDir);
@@ -129,12 +138,12 @@ public sealed class SongRenamer : ISongRenamer
             {
                 var fileName = Path.GetFileName(audioFile);
 
-                if (!fileName.StartsWith(oldName, StringComparison.OrdinalIgnoreCase))
+                if (!fileName.StartsWith(songName, StringComparison.OrdinalIgnoreCase))
                 {
                     continue;
                 }
 
-                var newFileName = newName + fileName[oldName.Length..];
+                var newFileName = newName + fileName[songName.Length..];
                 var newFilePath = Path.Combine(Path.GetDirectoryName(audioFile)!, newFileName);
 
                 try
