@@ -30,7 +30,7 @@
 ; prompt -> (first run only) a short runtime-fetch step -> done.
 
 #ifndef MyAppVersion
-  #define MyAppVersion "1.4.0"
+  #define MyAppVersion "1.4.2"
 #endif
 #ifndef Flavor
   #define Flavor "Web"

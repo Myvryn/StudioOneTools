@@ -9,6 +9,13 @@ git history.
 
 ---
 
+## 1.4.2 — 2026-10-10
+
+- Fixed: Song ReNamer now renames the song file itself. If the folder holds a single
+  .song whose name differed from the folder's, renaming changed the folder but left the
+  song (and its Mixdown and Master files) under the old name. Now they follow the new name.
+  A folder with several songs behaves as before: only the song named like the folder is renamed.
+
 ## 1.4.1 — 2026-09-29 (macOS only)
 
 - Fixed: the macOS app did not launch at all — no window, no process. It was
